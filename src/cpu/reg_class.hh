@@ -41,12 +41,11 @@
 #ifndef __CPU__REG_CLASS_HH__
 #define __CPU__REG_CLASS_HH__
 
-#include <cassert>
 #include <cstddef>
 #include <string>
 
+#include "base/intmath.hh"
 #include "base/types.hh"
-#include "config/the_isa.hh"
 
 namespace gem5
 {
@@ -95,22 +94,32 @@ class RegClass
   private:
     size_t _size;
     const RegIndex _zeroReg;
+    size_t _regBytes;
+    // This is how much to shift an index by to get an offset of a register in
+    // a register file from the register index, which would otherwise need to
+    // be calculated with a multiply.
+    size_t _regShift;
 
     static inline DefaultRegClassOps defaultOps;
     RegClassOps *_ops = &defaultOps;
 
   public:
-    RegClass(size_t new_size, RegIndex new_zero=-1) :
-        _size(new_size), _zeroReg(new_zero)
+    RegClass(size_t new_size, RegIndex new_zero=-1,
+            size_t reg_bytes=sizeof(RegVal)) :
+        _size(new_size), _zeroReg(new_zero), _regBytes(reg_bytes),
+        _regShift(ceilLog2(reg_bytes))
     {}
-    RegClass(size_t new_size, RegClassOps &new_ops, RegIndex new_zero=-1) :
-        RegClass(new_size, new_zero)
+    RegClass(size_t new_size, RegClassOps &new_ops, RegIndex new_zero=-1,
+            size_t reg_bytes=sizeof(RegVal)) :
+        RegClass(new_size, new_zero, reg_bytes)
     {
         _ops = &new_ops;
     }
 
     size_t size() const { return _size; }
     RegIndex zeroReg() const { return _zeroReg; }
+    size_t regBytes() const { return _regBytes; }
+    size_t regShift() const { return _regShift; }
 
     std::string regName(const RegId &id) const { return _ops->regName(id); }
 };
