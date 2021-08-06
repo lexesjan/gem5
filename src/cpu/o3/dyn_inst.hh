@@ -1146,27 +1146,36 @@ class DynInst : public ExecContext, public RefCounted
             switch (original_dest_reg.classValue()) {
               case IntRegClass:
                 setIntRegOperand(staticInst.get(), idx,
-                        cpu->readIntReg(prev_phys_reg));
+                        cpu->getReg(prev_phys_reg));
                 break;
               case FloatRegClass:
                 setFloatRegOperandBits(staticInst.get(), idx,
-                        cpu->readFloatReg(prev_phys_reg));
+                        cpu->getReg(prev_phys_reg));
                 break;
               case VecRegClass:
-                setVecRegOperand(staticInst.get(), idx,
-                        cpu->readVecReg(prev_phys_reg));
+                {
+                    TheISA::VecRegContainer val;
+                    cpu->getReg(prev_phys_reg, &val);
+                    setVecRegOperand(staticInst.get(), idx, val);
+                }
                 break;
               case VecElemClass:
-                setVecElemOperand(staticInst.get(), idx,
-                        cpu->readVecElem(prev_phys_reg));
+                {
+                    RegVal val;
+                    cpu->getReg(prev_phys_reg, &val);
+                    setVecElemOperand(staticInst.get(), idx, val);
+                }
                 break;
               case VecPredRegClass:
-                setVecPredRegOperand(staticInst.get(), idx,
-                        cpu->readVecPredReg(prev_phys_reg));
+                {
+                    TheISA::VecPredRegContainer val;
+                    cpu->getReg(prev_phys_reg, &val);
+                    setVecPredRegOperand(staticInst.get(), idx, val);
+                }
                 break;
               case CCRegClass:
                 setCCRegOperand(staticInst.get(), idx,
-                        cpu->readCCReg(prev_phys_reg));
+                        cpu->getReg(prev_phys_reg));
                 break;
               case MiscRegClass:
                 // no need to forward misc reg values
@@ -1196,19 +1205,21 @@ class DynInst : public ExecContext, public RefCounted
     RegVal
     readIntRegOperand(const StaticInst *si, int idx) override
     {
-        return cpu->readIntReg(regs.renamedSrcIdx(idx));
+        return cpu->getReg(regs.renamedSrcIdx(idx));
     }
 
     RegVal
     readFloatRegOperandBits(const StaticInst *si, int idx) override
     {
-        return cpu->readFloatReg(regs.renamedSrcIdx(idx));
+        return cpu->getReg(regs.renamedSrcIdx(idx));
     }
 
-    const TheISA::VecRegContainer&
+    TheISA::VecRegContainer
     readVecRegOperand(const StaticInst *si, int idx) const override
     {
-        return cpu->readVecReg(regs.renamedSrcIdx(idx));
+        TheISA::VecRegContainer val;
+        cpu->getReg(regs.renamedSrcIdx(idx), &val);
+        return val;
     }
 
     /**
@@ -1217,31 +1228,37 @@ class DynInst : public ExecContext, public RefCounted
     TheISA::VecRegContainer&
     getWritableVecRegOperand(const StaticInst *si, int idx) override
     {
-        return cpu->getWritableVecReg(regs.renamedDestIdx(idx));
+        return *(TheISA::VecRegContainer *)cpu->getWritableReg(
+                regs.renamedDestIdx(idx));
     }
 
     RegVal
     readVecElemOperand(const StaticInst *si, int idx) const override
     {
-        return cpu->readVecElem(regs.renamedSrcIdx(idx));
+        RegVal val;
+        cpu->getReg(regs.renamedSrcIdx(idx), &val);
+        return val;
     }
 
-    const TheISA::VecPredRegContainer&
+    TheISA::VecPredRegContainer
     readVecPredRegOperand(const StaticInst *si, int idx) const override
     {
-        return cpu->readVecPredReg(regs.renamedSrcIdx(idx));
+        TheISA::VecPredRegContainer val;
+        cpu->getReg(regs.renamedSrcIdx(idx), &val);
+        return val;
     }
 
     TheISA::VecPredRegContainer&
     getWritableVecPredRegOperand(const StaticInst *si, int idx) override
     {
-        return cpu->getWritableVecPredReg(regs.renamedDestIdx(idx));
+        return *(TheISA::VecPredRegContainer *)cpu->getWritableReg(
+                regs.renamedDestIdx(idx));
     }
 
     RegVal
     readCCRegOperand(const StaticInst *si, int idx) override
     {
-        return cpu->readCCReg(regs.renamedSrcIdx(idx));
+        return cpu->getReg(regs.renamedSrcIdx(idx));
     }
 
     /** @todo: Make results into arrays so they can handle multiple dest
@@ -1250,14 +1267,14 @@ class DynInst : public ExecContext, public RefCounted
     void
     setIntRegOperand(const StaticInst *si, int idx, RegVal val) override
     {
-        cpu->setIntReg(regs.renamedDestIdx(idx), val);
+        cpu->setReg(regs.renamedDestIdx(idx), val);
         setResult(val);
     }
 
     void
     setFloatRegOperandBits(const StaticInst *si, int idx, RegVal val) override
     {
-        cpu->setFloatReg(regs.renamedDestIdx(idx), val);
+        cpu->setReg(regs.renamedDestIdx(idx), val);
         setResult(val);
     }
 
@@ -1265,15 +1282,14 @@ class DynInst : public ExecContext, public RefCounted
     setVecRegOperand(const StaticInst *si, int idx,
                      const TheISA::VecRegContainer& val) override
     {
-        cpu->setVecReg(regs.renamedDestIdx(idx), val);
+        cpu->setReg(regs.renamedDestIdx(idx), &val);
         setResult(val);
     }
 
     void
     setVecElemOperand(const StaticInst *si, int idx, RegVal val) override
     {
-        int reg_idx = idx;
-        cpu->setVecElem(regs.renamedDestIdx(reg_idx), val);
+        cpu->setReg(regs.renamedDestIdx(idx), &val);
         setResult(val);
     }
 
@@ -1281,14 +1297,14 @@ class DynInst : public ExecContext, public RefCounted
     setVecPredRegOperand(const StaticInst *si, int idx,
                          const TheISA::VecPredRegContainer& val) override
     {
-        cpu->setVecPredReg(regs.renamedDestIdx(idx), val);
+        cpu->setReg(regs.renamedDestIdx(idx), &val);
         setResult(val);
     }
 
     void
     setCCRegOperand(const StaticInst *si, int idx, RegVal val) override
     {
-        cpu->setCCReg(regs.renamedDestIdx(idx), val);
+        cpu->setReg(regs.renamedDestIdx(idx), val);
         setResult(val);
     }
 };
