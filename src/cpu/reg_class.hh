@@ -79,6 +79,17 @@ class DefaultRegClassOps : public RegClassOps
     std::string regName(const RegId &id) const override;
 };
 
+class VecElemRegClassOps : public RegClassOps
+{
+  protected:
+    size_t elemsPerVec;
+
+  public:
+    VecElemRegClassOps(size_t elems_per_vec) : elemsPerVec(elems_per_vec) {}
+
+    std::string regName(const RegId &id) const override;
+};
+
 class RegClass
 {
   private:
