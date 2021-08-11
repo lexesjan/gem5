@@ -81,9 +81,12 @@ class PhysRegFile
         const size_t _regBytes;
 
       public:
+        const RegClass &regClass;
+
         RegFile(const RegClass &info, unsigned num_phys) :
             data(num_phys << info.regShift()), _size(num_phys),
-            _regShift(info.regShift()), _regBytes(info.regBytes())
+            _regShift(info.regShift()), _regBytes(info.regBytes()),
+            regClass(info)
         {}
 
         size_t size() const { return _size; }
@@ -269,7 +272,7 @@ class PhysRegFile
           case VecRegClass:
             vectorRegFile.get(idx, val);
             DPRINTF(IEW, "RegFile: Access to vector register %i, has "
-                    "data %s\n", idx, *(TheISA::VecRegContainer *)val);
+                    "data %s\n", idx, vectorRegFile.regClass.valString(val));
             break;
           case VecElemClass:
             *(RegVal *)val = getReg(phys_reg);
@@ -277,7 +280,7 @@ class PhysRegFile
           case VecPredRegClass:
             vecPredRegFile.get(idx, val);
             DPRINTF(IEW, "RegFile: Access to predicate register %i, has "
-                    "data %s\n", idx, *(TheISA::VecRegContainer *)val);
+                    "data %s\n", idx, vecPredRegFile.regClass.valString(val));
             break;
           case CCRegClass:
             *(RegVal *)val = getReg(phys_reg);
@@ -351,7 +354,7 @@ class PhysRegFile
             break;
           case VecRegClass:
             DPRINTF(IEW, "RegFile: Setting vector register %i to %s\n",
-                    idx, *(TheISA::VecRegContainer *)val);
+                    idx, vectorRegFile.regClass.valString(val));
             vectorRegFile.set(idx, val);
             break;
           case VecElemClass:
@@ -359,7 +362,7 @@ class PhysRegFile
             break;
           case VecPredRegClass:
             DPRINTF(IEW, "RegFile: Setting predicate register %i to %s\n",
-                    idx, *(TheISA::VecRegContainer *)val);
+                    idx, vectorRegFile.regClass.valString(val));
             vecPredRegFile.set(idx, val);
             break;
           case CCRegClass:
