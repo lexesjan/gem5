@@ -228,14 +228,14 @@ CPU::CPU(const O3CPUParams &params)
                 ++ridx) {
             // Note that we can't use the rename() method because we don't
             // want special treatment for the zero register at this point
-            PhysRegIdPtr phys_reg = freeList.getIntReg();
+            PhysRegIdPtr phys_reg = freeList.getReg(IntRegClass);
             renameMap[tid].setEntry(RegId(IntRegClass, ridx), phys_reg);
             commitRenameMap[tid].setEntry(RegId(IntRegClass, ridx), phys_reg);
         }
 
         for (RegIndex ridx = 0; ridx < regClasses.at(FloatRegClass).size();
                 ++ridx) {
-            PhysRegIdPtr phys_reg = freeList.getFloatReg();
+            PhysRegIdPtr phys_reg = freeList.getReg(FloatRegClass);
             renameMap[tid].setEntry(RegId(FloatRegClass, ridx), phys_reg);
             commitRenameMap[tid].setEntry(
                     RegId(FloatRegClass, ridx), phys_reg);
@@ -245,7 +245,7 @@ CPU::CPU(const O3CPUParams &params)
         /* Initialize the full-vector interface */
         for (RegIndex ridx = 0; ridx < numVecs; ++ridx) {
             RegId rid = RegId(VecRegClass, ridx);
-            PhysRegIdPtr phys_reg = freeList.getVecReg();
+            PhysRegIdPtr phys_reg = freeList.getReg(VecRegClass);
             renameMap[tid].setEntry(rid, phys_reg);
             commitRenameMap[tid].setEntry(rid, phys_reg);
         }
@@ -253,14 +253,14 @@ CPU::CPU(const O3CPUParams &params)
         const size_t numElems = regClasses.at(VecElemClass).size();
         for (RegIndex ridx = 0; ridx < numElems; ++ridx) {
             RegId lrid = RegId(VecElemClass, ridx);
-            PhysRegIdPtr phys_elem = freeList.getVecElem();
+            PhysRegIdPtr phys_elem = freeList.getReg(VecElemClass);
             renameMap[tid].setEntry(lrid, phys_elem);
             commitRenameMap[tid].setEntry(lrid, phys_elem);
         }
 
         for (RegIndex ridx = 0; ridx < regClasses.at(VecPredRegClass).size();
                 ++ridx) {
-            PhysRegIdPtr phys_reg = freeList.getVecPredReg();
+            PhysRegIdPtr phys_reg = freeList.getReg(VecPredRegClass);
             renameMap[tid].setEntry(RegId(VecPredRegClass, ridx), phys_reg);
             commitRenameMap[tid].setEntry(
                     RegId(VecPredRegClass, ridx), phys_reg);
@@ -268,7 +268,7 @@ CPU::CPU(const O3CPUParams &params)
 
         for (RegIndex ridx = 0; ridx < regClasses.at(CCRegClass).size();
                 ++ridx) {
-            PhysRegIdPtr phys_reg = freeList.getCCReg();
+            PhysRegIdPtr phys_reg = freeList.getReg(CCRegClass);
             renameMap[tid].setEntry(RegId(CCRegClass, ridx), phys_reg);
             commitRenameMap[tid].setEntry(RegId(CCRegClass, ridx), phys_reg);
         }
@@ -729,21 +729,21 @@ CPU::insertThread(ThreadID tid)
     const auto &regClasses = isa[tid]->regClasses();
 
     for (RegIndex idx = 0; idx < regClasses.at(IntRegClass).size(); idx++) {
-        PhysRegIdPtr phys_reg = freeList.getIntReg();
+        PhysRegIdPtr phys_reg = freeList.getReg(IntRegClass);
         renameMap[tid].setEntry(RegId(IntRegClass, idx), phys_reg);
         scoreboard.setReg(phys_reg);
     }
 
     //Bind Float Regs to Rename Map
     for (RegIndex idx = 0; idx < regClasses.at(FloatRegClass).size(); idx++) {
-        PhysRegIdPtr phys_reg = freeList.getFloatReg();
+        PhysRegIdPtr phys_reg = freeList.getReg(FloatRegClass);
         renameMap[tid].setEntry(RegId(FloatRegClass, idx), phys_reg);
         scoreboard.setReg(phys_reg);
     }
 
     //Bind condition-code Regs to Rename Map
     for (RegIndex idx = 0; idx < regClasses.at(CCRegClass).size(); idx++) {
-        PhysRegIdPtr phys_reg = freeList.getCCReg();
+        PhysRegIdPtr phys_reg = freeList.getReg(CCRegClass);
         renameMap[tid].setEntry(RegId(CCRegClass, idx), phys_reg);
         scoreboard.setReg(phys_reg);
     }
