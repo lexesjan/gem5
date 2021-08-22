@@ -472,7 +472,7 @@ class SimpleThread : public ThreadState, public ThreadContext
         auto &reg_file = regFiles[reg.classValue()];
         const auto &reg_class = reg_file.regClass;
 
-        if (reg.index() == reg_class.zeroReg() || reg.is(InvalidRegClass))
+        if (reg.is(InvalidRegClass))
             return;
 
         DPRINTFV(reg_class.debug(), "Setting %s register %s (%d) to %#x.\n",
@@ -488,7 +488,7 @@ class SimpleThread : public ThreadState, public ThreadContext
         auto &reg_file = regFiles[reg.classValue()];
         const auto &reg_class = reg_file.regClass;
 
-        if (reg.index() == reg_class.zeroReg() || reg.is(InvalidRegClass))
+        if (reg.is(InvalidRegClass))
             return;
 
         DPRINTFV(reg_class.debug(), "Setting %s register %d to %#x.\n",
