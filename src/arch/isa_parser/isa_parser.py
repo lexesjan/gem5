@@ -517,6 +517,7 @@ class ISAParser(Grammar):
         symbols = ('makeList', 're')
         self.exportContext = dict([(s, eval(s)) for s in symbols])
         self.exportContext.update({
+            'overrideInOperand': overrideInOperand,
             'IntRegOp': IntRegOperandDesc,
             'FloatRegOp': FloatRegOperandDesc,
             'CCRegOp': CCRegOperandDesc,
