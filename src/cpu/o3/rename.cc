@@ -1016,6 +1016,8 @@ Rename::renameSrcRegs(const DynInstPtr &inst, ThreadID tid)
 
         renamed_reg = map->lookup(tc->flattenRegId(src_reg));
         switch (src_reg.classValue()) {
+          case InvalidRegClass:
+            break;
           case IntRegClass:
             stats.intLookups++;
             break;
