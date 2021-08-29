@@ -513,7 +513,7 @@ mcrMrc15TrapToHyp(const MiscRegIndex miscReg, ThreadContext *tc, uint32_t iss,
 {
     bool isRead;
     uint32_t crm;
-    IntRegIndex rt;
+    RegIndex rt;
     uint32_t crn;
     uint32_t opc1;
     uint32_t opc2;
@@ -670,7 +670,7 @@ mcrMrc14TrapToHyp(const MiscRegIndex miscReg, HCR hcr, CPSR cpsr, SCR scr,
 {
     bool isRead;
     uint32_t crm;
-    IntRegIndex rt;
+    RegIndex rt;
     uint32_t crn;
     uint32_t opc1;
     uint32_t opc2;
@@ -729,7 +729,7 @@ mcrrMrrc15TrapToHyp(const MiscRegIndex miscReg, ThreadContext *tc,
                     uint32_t iss, ExceptionClass *ec)
 {
     uint32_t crm;
-    IntRegIndex rt;
+    RegIndex rt;
     uint32_t crn;
     uint32_t opc1;
     uint32_t opc2;
@@ -1174,18 +1174,18 @@ decodeMrsMsrBankedReg(uint8_t sysM, bool r, bool &isIntReg, int &regIdx,
 
         if (sysM4To3 == 0) {
             mode = MODE_USER;
-            regIdx = intRegInMode(mode, bits(sysM, 2, 0) + 8);
+            regIdx = int_reg::regInMode(mode, bits(sysM, 2, 0) + 8);
         } else if (sysM4To3 == 1) {
             mode = MODE_FIQ;
-            regIdx = intRegInMode(mode, bits(sysM, 2, 0) + 8);
+            regIdx = int_reg::regInMode(mode, bits(sysM, 2, 0) + 8);
         } else if (sysM4To3 == 3) {
             if (bits(sysM, 1) == 0) {
                 mode = MODE_MON;
-                regIdx = intRegInMode(mode, 14 - bits(sysM, 0));
+                regIdx = int_reg::regInMode(mode, 14 - bits(sysM, 0));
             } else {
                 mode = MODE_HYP;
                 if (bits(sysM, 0) == 1) {
-                    regIdx = intRegInMode(mode, 13); // R13 in HYP
+                    regIdx = int_reg::regInMode(mode, 13); // R13 in HYP
                 } else {
                     isIntReg = false;
                     regIdx = MISCREG_ELR_HYP;
@@ -1200,9 +1200,9 @@ decodeMrsMsrBankedReg(uint8_t sysM, bool r, bool &isIntReg, int &regIdx,
                                     ((sysM2 && !sysM1) << 2) |
                                     ((sysM2 && sysM1) << 3) |
                                     (1 << 4));
-            regIdx = intRegInMode(mode, 14 - bits(sysM, 0));
+            regIdx = int_reg::regInMode(mode, 14 - bits(sysM, 0));
             // Don't flatten the register here. This is going to go through
-            // setIntReg() which will do the flattening
+            // setReg() which will do the flattening
             ok &= mode != cpsr.mode;
         }
     }

@@ -76,9 +76,9 @@ struct Result<ABI, SyscallReturn,
         if (ret.suppressed() || ret.needsRetry())
             return;
 
-        tc->setIntReg(ArmISA::ReturnValueReg, ret.encodedValue());
+        tc->setReg(ArmISA::ReturnValueReg, ret.encodedValue());
         if (ret.count() > 1)
-            tc->setIntReg(ArmISA::SyscallPseudoReturnReg, ret.value2());
+            tc->setReg(ArmISA::SyscallPseudoReturnReg, ret.value2());
     }
 };
 
