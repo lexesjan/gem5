@@ -255,7 +255,7 @@ def template JumpExecute {{
     %(class_name)s::branchTarget(ThreadContext *tc) const
     {
         PCState pc = tc->pcState();
-        pc.set((tc->readIntReg(srcRegIdx(0).index()) + imm)&~0x1);
+        pc.set((tc->getReg(srcRegIdx(0)) + imm) & ~0x1);
         return pc;
     }
 
