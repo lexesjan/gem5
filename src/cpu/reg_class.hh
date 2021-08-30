@@ -81,6 +81,8 @@ class RegClassOps
 class RegClass
 {
   private:
+    RegClassType _type;
+
     size_t _size;
     size_t _regBytes;
     // This is how much to shift an index by to get an offset of a register in
@@ -93,18 +95,20 @@ class RegClass
     const debug::Flag &debugFlag;
 
   public:
-    constexpr RegClass(size_t new_size, const debug::Flag &debug_flag,
-            size_t reg_bytes=sizeof(RegVal)) :
-        _size(new_size), _regBytes(reg_bytes), _regShift(ceilLog2(reg_bytes)),
-        debugFlag(debug_flag)
-    {}
-    constexpr RegClass(size_t new_size, RegClassOps &new_ops,
+    constexpr RegClass(RegClassType type, size_t new_size,
             const debug::Flag &debug_flag, size_t reg_bytes=sizeof(RegVal)) :
-        RegClass(new_size, debug_flag, reg_bytes)
+        _type(type), _size(new_size), _regBytes(reg_bytes),
+        _regShift(ceilLog2(reg_bytes)), debugFlag(debug_flag)
+    {}
+    constexpr RegClass(RegClassType type, size_t new_size,
+            RegClassOps &new_ops, const debug::Flag &debug_flag,
+            size_t reg_bytes=sizeof(RegVal)) :
+        RegClass(type, new_size, debug_flag, reg_bytes)
     {
         _ops = &new_ops;
     }
 
+    constexpr RegClassType type() const { return _type; }
     constexpr size_t size() const { return _size; }
     constexpr size_t regBytes() const { return _regBytes; }
     constexpr size_t regShift() const { return _regShift; }
