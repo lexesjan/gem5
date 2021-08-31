@@ -142,7 +142,7 @@ let {{
                     regString = "int_reg::R%s" % opType.reg.lower()
                 env.addReg(regString)
                 env.addToDisassembly(
-                    "printReg(out, RegId(IntRegClass, %s), regSize);\n" %
+                    "printReg(out, intRegClass[%s], regSize);\n" %
                     regString)
 
                 Name += "_R"
@@ -151,7 +151,7 @@ let {{
                 # This refers to registers whose index is encoded as part of
                 # the opcode.
                 env.addToDisassembly(
-                        "printReg(out, RegId(IntRegClass, %s), regSize);\n" %
+                        "printReg(out, intRegClass[%s], regSize);\n" %
                         InstRegIndex)
 
                 Name += "_R"
@@ -197,7 +197,7 @@ let {{
                     Name += "_XMM"
                 else:
                     regFormat = \
-                        "printReg(out, RegId(IntRegClass, %s), regSize);\n"
+                        "printReg(out, intRegClass[%s], regSize);\n"
                     Name += "_R"
                 env.addToDisassembly(regFormat % ModRMRegIndex)
             elif opType.tag in ("E", "Q", "W"):
@@ -219,7 +219,7 @@ let {{
                     regSuffix = "_XMM"
                 else:
                     regFormat = \
-                        "printReg(out, RegId(IntRegClass, %s), regSize);\n"
+                        "printReg(out, intRegClass[%s], regSize);\n"
                     regSuffix = "_R"
                 env.addToDisassembly(regFormat % ModRMRegIndex)
                 return doSplitDecode("MODRM_MOD",
@@ -247,7 +247,7 @@ let {{
                     Name += "_XMM"
                 else:
                     regFormat = \
-                        "printReg(out, RegId(IntRegClass, %s), regSize);\n"
+                        "printReg(out, intRegClass[%s], regSize);\n"
                     Name += "_R"
                 env.addToDisassembly(regFormat % ModRMRegIndex)
             elif opType.tag in ("X", "Y"):

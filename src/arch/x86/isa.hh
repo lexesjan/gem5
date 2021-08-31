@@ -33,6 +33,7 @@
 #include <string>
 
 #include "arch/generic/isa.hh"
+#include "arch/x86/regs/ccr.hh"
 #include "arch/x86/regs/float.hh"
 #include "arch/x86/regs/int.hh"
 #include "arch/x86/regs/misc.hh"
@@ -75,13 +76,13 @@ class ISA : public BaseISA
     {
         switch (regId.classValue()) {
           case IntRegClass:
-            return RegId(IntRegClass, flattenIntIndex(regId.index()));
+            return intRegClass[flattenIntIndex(regId.index())];
           case FloatRegClass:
-            return RegId(FloatRegClass, flattenFloatIndex(regId.index()));
+            return floatRegClass[flattenFloatIndex(regId.index())];
           case CCRegClass:
-            return RegId(CCRegClass, flattenCCIndex(regId.index()));
+            return ccRegClass[flattenCCIndex(regId.index())];
           case MiscRegClass:
-            return RegId(MiscRegClass, flattenMiscIndex(regId.index()));
+            return miscRegClass[flattenMiscIndex(regId.index())];
           default:
             break;
         }
