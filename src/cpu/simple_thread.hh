@@ -270,7 +270,7 @@ class SimpleThread : public ThreadState, public ThreadContext
 
     CheckerCPU *getCheckerCpuPtr() override { return NULL; }
 
-    BaseISA *getIsaPtr() override { return isa; }
+    BaseISA *getIsaPtr() const override { return isa; }
 
     TheISA::Decoder *getDecoderPtr() override { return &decoder; }
 
