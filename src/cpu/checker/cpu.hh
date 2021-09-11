@@ -194,15 +194,17 @@ class CheckerCPU : public BaseCPU, public ExecContext
     void
     setRegOperand(const StaticInst *si, int idx, RegVal val) override
     {
-        thread->setReg(si->destRegIdx(idx), val);
-        result.emplace(val);
+        RegId id = si->destRegIdx(idx);
+        thread->setReg(id, val);
+        result.emplace(id.regClass(), val);
     }
 
     void
     setRegOperand(const StaticInst *si, int idx, const void *val) override
     {
-        thread->setReg(si->destRegIdx(idx), val);
-        //TODO setVecResult, setVecPredResult setVecElemResult?
+        RegId id = si->destRegIdx(idx);
+        thread->setReg(id, val);
+        result.emplace(id.regClass(), val);
     }
 
     bool readPredicate() const override { return thread->readPredicate(); }
