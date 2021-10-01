@@ -196,12 +196,6 @@ ThreadContext::pcStateNoRecord(const TheISA::PCState &val)
     conditionalSquash();
 }
 
-RegId
-ThreadContext::flattenRegId(const RegId& regId) const
-{
-    return cpu->isa[thread->threadId()]->flattenRegId(regId);
-}
-
 void
 ThreadContext::setMiscRegNoEffect(RegIndex misc_reg, RegVal val)
 {
