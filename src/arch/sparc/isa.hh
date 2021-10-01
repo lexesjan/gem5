@@ -167,6 +167,7 @@ class ISA : public BaseISA
     void reloadRegMap();
 
   public:
+    const RegIndex &mapIntRegId(RegIndex idx) const { return intRegMap[idx]; }
 
     void clear();
 
