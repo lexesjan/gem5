@@ -622,52 +622,23 @@ ThreadContext::setMiscRegNoEffect(RegIndex misc_reg, const RegVal val)
 RegVal
 ThreadContext::getReg(const RegId &reg) const
 {
-    return getRegFlat(flattenRegId(reg));
+    RegVal val;
+    getReg(reg, &val);
+    return val;
 }
 
 void
 ThreadContext::setReg(const RegId &reg, RegVal val)
 {
-    setRegFlat(flattenRegId(reg), val);
+    setReg(reg, &val);
 }
 
 void
 ThreadContext::getReg(const RegId &reg, void *val) const
 {
-    getRegFlat(flattenRegId(reg), val);
-}
-
-void
-ThreadContext::setReg(const RegId &reg, const void *val)
-{
-    setRegFlat(flattenRegId(reg), val);
-}
-
-void *
-ThreadContext::getWritableReg(const RegId &reg)
-{
-    return getWritableRegFlat(flattenRegId(reg));
-}
-
-RegVal
-ThreadContext::getRegFlat(const RegId &reg) const
-{
-    RegVal val;
-    getRegFlat(reg, &val);
-    return val;
-}
-
-void
-ThreadContext::setRegFlat(const RegId &reg, RegVal val)
-{
-    setRegFlat(reg, &val);
-}
-
-void
-ThreadContext::getRegFlat(const RegId &reg, void *val) const
-{
-    const RegIndex idx = reg.index();
-    const RegClassType type = reg.classValue();
+    const RegId flat = reg.flatten(*_isa);
+    const RegIndex idx = flat.index();
+    const RegClassType type = flat.classValue();
     switch (type) {
       case IntRegClass:
         *(RegVal *)val = readIntRegFlat(idx);
@@ -692,10 +663,11 @@ ThreadContext::getRegFlat(const RegId &reg, void *val) const
 }
 
 void
-ThreadContext::setRegFlat(const RegId &reg, const void *val)
+ThreadContext::setReg(const RegId &reg, const void *val)
 {
-    const RegIndex idx = reg.index();
-    const RegClassType type = reg.classValue();
+    const RegId flat = reg.flatten(*_isa);
+    const RegIndex idx = flat.index();
+    const RegClassType type = flat.classValue();
     switch (type) {
       case IntRegClass:
         setIntRegFlat(idx, *(RegVal *)val);
@@ -720,10 +692,11 @@ ThreadContext::setRegFlat(const RegId &reg, const void *val)
 }
 
 void *
-ThreadContext::getRegWritableFlat(const RegId &reg)
+ThreadContext::getRegWritable(const RegId &reg)
 {
-    const RegIndex idx = reg.index();
-    const RegClassType type = reg.classValue();
+    const RegId flat = reg.flatten(*_isa);
+    const RegIndex idx = flat.index();
+    const RegClassType type = flat.classValue();
     switch (type) {
       case VecRegClass:
         return &getWritableVecRegFlat(idx);
