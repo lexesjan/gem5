@@ -59,7 +59,7 @@ class ISA : public BaseISA
     std::string vendorString;
 
   public:
-    void clear();
+    void clear() override;
 
     using Params = X86ISAParams;
 

@@ -66,6 +66,8 @@ class BaseISA : public SimObject
     RegClasses _regClasses;
 
   public:
+    virtual void clear() {}
+
     virtual void takeOverFrom(ThreadContext *new_tc, ThreadContext *old_tc) {}
     virtual void setThreadContext(ThreadContext *_tc) { tc = _tc; }
 

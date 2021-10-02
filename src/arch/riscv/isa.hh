@@ -74,7 +74,7 @@ class ISA : public BaseISA
   public:
     using Params = RiscvISAParams;
 
-    void clear();
+    void clear() override;
 
   public:
     RegVal readMiscRegNoEffect(int misc_reg) const;

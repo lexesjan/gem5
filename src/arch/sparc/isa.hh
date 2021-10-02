@@ -169,7 +169,7 @@ class ISA : public BaseISA
   public:
     const RegIndex &mapIntRegId(RegIndex idx) const { return intRegMap[idx]; }
 
-    void clear();
+    void clear() override;
 
     void serialize(CheckpointOut &cp) const override;
     void unserialize(CheckpointIn &cp) override;

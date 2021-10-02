@@ -56,9 +56,6 @@ class ISA : public BaseISA
     RegVal miscRegs[NUM_MISCREGS];
 
   public:
-    void clear() {}
-
-  public:
     RegVal
     readMiscRegNoEffect(int misc_reg) const
     {

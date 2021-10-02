@@ -76,7 +76,7 @@ namespace MipsISA
         std::vector<BankType> bankType;
 
       public:
-        void clear();
+        void clear() override;
 
       public:
         void configCP();
