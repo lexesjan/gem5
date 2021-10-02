@@ -49,7 +49,6 @@
 #include "arch/generic/htm.hh"
 #include "arch/generic/mmu.hh"
 #include "arch/generic/tlb.hh"
-#include "arch/isa.hh"
 #include "arch/pcstate.hh"
 #include "base/logging.hh"
 #include "base/types.hh"
