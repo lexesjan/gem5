@@ -48,10 +48,11 @@
 namespace gem5
 {
 
+class BaseISA;
+
 namespace X86ISA
 {
 
-class ISA;
 class Decoder : public InstDecoder
 {
   private:
@@ -255,7 +256,7 @@ class Decoder : public InstDecoder
     StaticInstPtr decode(ExtMachInst mach_inst, Addr addr);
 
   public:
-    Decoder(ISA *isa=nullptr) : InstDecoder(&fetchChunk)
+    Decoder(BaseISA *isa=nullptr) : InstDecoder(&fetchChunk)
     {
         emi.reset();
         emi.mode.mode = mode;

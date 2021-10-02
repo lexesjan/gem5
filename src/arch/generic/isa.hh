@@ -68,6 +68,12 @@ class BaseISA : public SimObject
   public:
     virtual void clear() {}
 
+    virtual RegVal readMiscRegNoEffect(RegIndex idx) const = 0;
+    virtual RegVal readMiscReg(RegIndex idx) = 0;
+
+    virtual void setMiscRegNoEffect(RegIndex idx, RegVal val) = 0;
+    virtual void setMiscReg(RegIndex idx, RegVal val) = 0;
+
     virtual void takeOverFrom(ThreadContext *new_tc, ThreadContext *old_tc) {}
     virtual void setThreadContext(ThreadContext *_tc) { tc = _tc; }
 

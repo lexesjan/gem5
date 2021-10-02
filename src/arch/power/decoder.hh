@@ -39,10 +39,11 @@
 namespace gem5
 {
 
+class BaseISA;
+
 namespace PowerISA
 {
 
-class ISA;
 class Decoder : public InstDecoder
 {
   protected:
@@ -51,7 +52,7 @@ class Decoder : public InstDecoder
     bool instDone;
 
   public:
-    Decoder(ISA* isa=nullptr) : InstDecoder(&emi), instDone(false) {}
+    Decoder(BaseISA* isa=nullptr) : InstDecoder(&emi), instDone(false) {}
 
     void
     process()

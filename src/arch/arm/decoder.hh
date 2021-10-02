@@ -55,10 +55,11 @@
 namespace gem5
 {
 
+class BaseISA;
+
 namespace ArmISA
 {
 
-class ISA;
 class Decoder : public InstDecoder
 {
   protected:
@@ -132,7 +133,7 @@ class Decoder : public InstDecoder
     }
 
   public: // Decoder API
-    Decoder(ISA* isa = nullptr);
+    Decoder(BaseISA* isa = nullptr);
 
     /** Reset the decoders internal state. */
     void reset();

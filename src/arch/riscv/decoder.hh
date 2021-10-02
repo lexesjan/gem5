@@ -41,10 +41,11 @@
 namespace gem5
 {
 
+class BaseISA;
+
 namespace RiscvISA
 {
 
-class ISA;
 class Decoder : public InstDecoder
 {
   private:
@@ -67,7 +68,7 @@ class Decoder : public InstDecoder
     StaticInstPtr decode(ExtMachInst mach_inst, Addr addr);
 
   public:
-    Decoder(ISA* isa=nullptr) : InstDecoder(&machInst) { reset(); }
+    Decoder(BaseISA* isa=nullptr) : InstDecoder(&machInst) { reset(); }
 
     void process() {}
     void reset();

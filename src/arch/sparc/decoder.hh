@@ -38,22 +38,22 @@
 namespace gem5
 {
 
+class BaseISA;
+
 namespace SparcISA
 {
 
-class ISA;
 class Decoder : public InstDecoder
 {
   protected:
     // The extended machine instruction being generated
     ExtMachInst emi;
     uint32_t machInst;
-    bool instDone;
-    RegVal asi;
+    bool instDone = false;
+    RegVal asi = 0;
 
   public:
-    Decoder(ISA* isa=nullptr) : InstDecoder(&machInst), instDone(false), asi(0)
-    {}
+    Decoder(BaseISA* isa=nullptr) : InstDecoder(&machInst) {}
 
     void process() {}
 

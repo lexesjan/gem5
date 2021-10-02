@@ -40,10 +40,11 @@
 namespace gem5
 {
 
+class BaseISA;
+
 namespace MipsISA
 {
 
-class ISA;
 class Decoder : public InstDecoder
 {
   protected:
@@ -53,7 +54,7 @@ class Decoder : public InstDecoder
     bool instDone;
 
   public:
-    Decoder(ISA* isa = nullptr) : InstDecoder(&machInst), instDone(false)
+    Decoder(BaseISA* isa=nullptr) : InstDecoder(&machInst), instDone(false)
     {}
 
     void
