@@ -41,6 +41,7 @@
 #ifndef __INSTRECORD_HH__
 #define __INSTRECORD_HH__
 
+#include "arch/generic/pcstate.hh"
 #include "base/types.hh"
 #include "cpu/inst_res.hh"
 #include "cpu/inst_seq.hh"
@@ -65,7 +66,7 @@ class InstRecord
     // need to make this ref-counted so it doesn't go away before we
     // dump the record
     StaticInstPtr staticInst;
-    TheISA::PCState pc;
+    std::unique_ptr<PCStateBase> pc;
     StaticInstPtr macroStaticInst;
 
     // The remaining fields are only valid for particular instruction
@@ -154,11 +155,10 @@ class InstRecord
 
   public:
     InstRecord(Tick _when, ThreadContext *_thread,
-               const StaticInstPtr _staticInst,
-               TheISA::PCState _pc,
+               const StaticInstPtr _staticInst, const PCStateBase &_pc,
                const StaticInstPtr _macroStaticInst=nullptr)
-        : when(_when), thread(_thread), staticInst(_staticInst), pc(_pc),
-        macroStaticInst(_macroStaticInst)
+        : when(_when), thread(_thread), staticInst(_staticInst),
+        pc(_pc.clone()), macroStaticInst(_macroStaticInst)
     {}
 
     virtual ~InstRecord()
@@ -263,7 +263,7 @@ class InstRecord
     Tick getWhen() const { return when; }
     ThreadContext *getThread() const { return thread; }
     StaticInstPtr getStaticInst() const { return staticInst; }
-    TheISA::PCState getPCState() const { return pc; }
+    const PCStateBase &getPCState() const { return *pc; }
     StaticInstPtr getMacroStaticInst() const { return macroStaticInst; }
 
     Addr getAddr() const { return addr; }
@@ -293,7 +293,7 @@ class InstTracer : public SimObject
 
     virtual InstRecord *
         getInstRecord(Tick when, ThreadContext *tc,
-                const StaticInstPtr staticInst, TheISA::PCState pc,
+                const StaticInstPtr staticInst, const PCStateBase &pc,
                 const StaticInstPtr macroStaticInst=nullptr) = 0;
 };
 
