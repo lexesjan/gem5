@@ -119,7 +119,7 @@ std::ostream &
 operator <<(std::ostream &os, const MinorDynInst &inst)
 {
     os << inst.id << " pc: 0x"
-        << std::hex << inst.pc.instAddr() << std::dec << " (";
+        << std::hex << inst.pc->instAddr() << std::dec << " (";
 
     if (inst.isFault())
         os << "fault: \"" << inst.fault->name() << '"';
@@ -175,7 +175,7 @@ MinorDynInst::minorTraceInst(const Named &named_object) const
 {
     if (isFault()) {
         minorInst(named_object, "id=F;%s addr=0x%x fault=\"%s\"\n",
-            id, pc.instAddr(), fault->name());
+            id, pc->instAddr(), fault->name());
     } else {
         unsigned int num_src_regs = staticInst->numSrcRegs();
         unsigned int num_dest_regs = staticInst->numDestRegs();
@@ -215,7 +215,7 @@ MinorDynInst::minorTraceInst(const Named &named_object) const
 
         minorInst(named_object, "id=%s addr=0x%x inst=\"%s\" class=%s"
             " flags=\"%s\"%s%s\n",
-            id, pc.instAddr(),
+            id, pc->instAddr(),
             (staticInst->opClass() == No_OpClass ?
                 "(invalid)" : staticInst->disassemble(0,NULL)),
             enums::OpClassStrings[staticInst->opClass()],
