@@ -505,7 +505,8 @@ class PCStateOperand(Operand):
                     f'__parserAutoPCState.{self.reg_spec}();\n'
         else:
             # The whole PC state itself.
-            return f'{self.base_name} = xc->pcState();\n'
+            return f'{self.base_name} = ' \
+                    f'xc->pcState().as<{self.parser.namespace}::PCState>();\n'
 
     def makeWrite(self):
         if self.reg_spec:
@@ -514,7 +515,7 @@ class PCStateOperand(Operand):
                 (self.reg_spec, self.base_name)
         else:
             # The whole PC state itself.
-            return 'xc->pcState(%s);\n' % self.base_name
+            return f'xc->pcState({self.base_name});\n'
 
     def makeDecl(self):
         ctype = f'{self.parser.namespace}::PCState'
