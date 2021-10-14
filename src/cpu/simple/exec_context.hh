@@ -69,7 +69,7 @@ class SimpleExecContext : public ExecContext
     bool stayAtPC;
 
     // Branch prediction
-    TheISA::PCState predPC;
+    std::unique_ptr<PCStateBase> predPC;
 
     /** PER-THREAD STATS */
     Counter numInst;
