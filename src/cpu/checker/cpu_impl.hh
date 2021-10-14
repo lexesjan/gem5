@@ -510,10 +510,9 @@ Checker<DynInstPtr>::validateExecution(const DynInstPtr &inst)
         }
     }
 
-    if (inst->nextInstAddr() != thread->nextInstAddr()) {
-        warn("%lli: Instruction next PCs do not match! Inst: %#x, "
-             "checker: %#x",
-             curTick(), inst->nextInstAddr(), thread->nextInstAddr());
+    if (inst->pcState() != thread->pcState()) {
+        warn("%lli: Instruction PCs do not match! Inst: %s, checker: %s",
+             curTick(), inst->pcState(), thread->pcState());
         handleError(inst);
     }
 
@@ -608,10 +607,9 @@ void
 Checker<DynInstPtr>::dumpAndExit(const DynInstPtr &inst)
 {
     cprintf("Error detected, instruction information:\n");
-    cprintf("PC:%s, nextPC:%#x\n[sn:%lli]\n[tid:%i]\n"
+    cprintf("PC:%s\n[sn:%lli]\n[tid:%i]\n"
             "Completed:%i\n",
             inst->pcState(),
-            inst->nextInstAddr(),
             inst->seqNum,
             inst->threadNumber,
             inst->isCompleted());
