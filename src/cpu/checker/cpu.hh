@@ -322,10 +322,10 @@ class CheckerCPU : public BaseCPU, public ExecContext
     /////////////////////////////////////////
 
     void
-    recordPCChange(const TheISA::PCState &val)
+    recordPCChange(const PCStateBase &val)
     {
        changedPC = true;
-       newPCState = val;
+       set(newPCState, val);
     }
 
     void
@@ -418,7 +418,7 @@ class CheckerCPU : public BaseCPU, public ExecContext
 
     bool changedPC;
     bool willChangePC;
-    TheISA::PCState newPCState;
+    std::unique_ptr<PCStateBase> newPCState;
     bool exitOnError;
     bool updateOnError;
     bool warnOnlyOnLoadError;
