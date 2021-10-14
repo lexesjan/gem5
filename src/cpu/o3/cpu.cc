@@ -1197,7 +1197,7 @@ CPU::setArchReg(const RegId &reg, const void *val, ThreadID tid)
 TheISA::PCState
 CPU::pcState(ThreadID tid)
 {
-    return commit.pcState(tid);
+    return commit.pcState(tid).as<TheISA::PCState>();
 }
 
 void
