@@ -196,13 +196,6 @@ class ThreadContext : public gem5::ThreadContext
     }
 
     /** Reads this thread's next PC. */
-    Addr
-    nextInstAddr() const override
-    {
-        return cpu->nextInstAddr(thread->threadId());
-    }
-
-    /** Reads this thread's next PC. */
     MicroPC
     microPC() const override
     {
