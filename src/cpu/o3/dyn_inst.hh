@@ -562,9 +562,6 @@ class DynInst : public ExecContext, public RefCounted
     /** Returns the predicted PC immediately after the branch. */
     Addr predInstAddr() { return predPC->instAddr(); }
 
-    /** Returns the predicted micro PC after the branch */
-    Addr predMicroPC() { return predPC->microPC(); }
-
     /** Returns whether the instruction was predicted taken or not. */
     bool readPredTaken() { return instFlags[PredTaken]; }
 
@@ -942,9 +939,6 @@ class DynInst : public ExecContext, public RefCounted
 
     /** Read the PC of this instruction. */
     Addr instAddr() const { return pc->instAddr(); }
-
-    /**Read the micro PC of this instruction. */
-    Addr microPC() const { return pc->microPC(); }
 
     bool readPredicate() const override { return instFlags[Predicate]; }
 

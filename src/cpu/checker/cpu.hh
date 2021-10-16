@@ -274,7 +274,6 @@ class CheckerCPU : public BaseCPU, public ExecContext
         thread->pcState(val);
     }
     Addr instAddr() { return thread->instAddr(); }
-    MicroPC microPC() { return thread->microPC(); }
     //////////////////////////////////////////
 
     RegVal
