@@ -47,7 +47,7 @@
 
 #include "arch/generic/htm.hh"
 #include "arch/generic/isa.hh"
-#include "arch/pcstate.hh"
+#include "arch/generic/pcstate.hh"
 #include "base/types.hh"
 #include "config/the_isa.hh"
 #include "cpu/pc_event.hh"
