@@ -1222,7 +1222,7 @@ Fetch::fetch(bool &status_change)
 
             memcpy(dec_ptr->moreBytesPtr(),
                     fetchBuffer[tid] + blkOffset * instSize, instSize);
-            decoder[tid]->moreBytes(this_pc.as<TheISA::PCState>(), fetchAddr);
+            decoder[tid]->moreBytes(this_pc, fetchAddr);
 
             if (dec_ptr->needMoreBytes()) {
                 blkOffset++;
@@ -1236,8 +1236,7 @@ Fetch::fetch(bool &status_change)
         do {
             if (!(curMacroop || inRom)) {
                 if (dec_ptr->instReady()) {
-                    staticInst = dec_ptr->decode(
-                            this_pc.as<TheISA::PCState>());
+                    staticInst = dec_ptr->decode(this_pc);
 
                     // Increment stat of fetched instructions.
                     ++fetchStats.insts;
