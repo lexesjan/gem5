@@ -255,9 +255,9 @@ def template JumpExecute {{
     std::unique_ptr<PCStateBase>
     %(class_name)s::branchTarget(ThreadContext *tc) const
     {
-        PCState pc = tc->pcState();
-        pc.set((tc->getReg(srcRegIdx(0)) + imm) & ~0x1);
-        return std::unique_ptr<PCStateBase>{pc.clone()};
+        PCStateBase *pc_ptr = tc->pcState().clone();
+        pc_ptr->as<PCState>().set((tc->getReg(srcRegIdx(0)) + imm) & ~0x1);
+        return std::unique_ptr<PCStateBase>{pc_ptr};
     }
 
     std::string

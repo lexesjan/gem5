@@ -114,7 +114,7 @@ MipsFaultBase::setExceptionState(ThreadContext *tc, uint8_t excCode)
     tc->setMiscRegNoEffect(misc_reg::Status, status);
 
     // write EPC
-    PCState pc = tc->pcState();
+    auto pc = tc->pcState().as<PCState>();
     DPRINTF(MipsPRA, "PC: %s\n", pc);
     bool delay_slot = pc.pc() + sizeof(MachInst) != pc.npc();
     tc->setMiscRegNoEffect(misc_reg::Epc,

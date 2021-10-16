@@ -194,7 +194,7 @@ RemoteGDB::RiscvGdbRegCache::getRegs(ThreadContext *context)
     for (int i = 0; i < int_reg::NumArchRegs; i++) {
         r.gpr[i] = context->getReg(intRegClass[i]);
     }
-    r.pc = context->pcState().pc();
+    r.pc = context->pcState().instAddr();
 
     // Floating point registers
     for (int i = 0; i < float_reg::NumRegs; i++)

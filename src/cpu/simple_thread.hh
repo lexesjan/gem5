@@ -162,7 +162,7 @@ class SimpleThread : public ThreadState, public ThreadContext
 
     BaseISA *const isa;    // one "instance" of the current ISA.
 
-    TheISA::PCState _pcState;
+    std::unique_ptr<PCStateBase> _pcState;
 
     // hardware transactional memory
     std::unique_ptr<BaseHTMCheckpoint> _htmCheckpoint;
@@ -306,7 +306,7 @@ class SimpleThread : public ThreadState, public ThreadContext
     void
     clearArchRegs() override
     {
-        _pcState.set(0);
+        set(_pcState, isa->newPCState());
         for (auto &rf: regFiles)
             rf.clear();
         isa->clear();
@@ -315,17 +315,17 @@ class SimpleThread : public ThreadState, public ThreadContext
     //
     // New accessors for new decoder.
     //
-    TheISA::PCState pcState() const override { return _pcState; }
-    void pcState(const TheISA::PCState &val) override { _pcState = val; }
+    const PCStateBase &pcState() const override { return *_pcState; }
+    void pcState(const PCStateBase &val) override { set(_pcState, val); }
 
     void
-    pcStateNoRecord(const TheISA::PCState &val) override
+    pcStateNoRecord(const PCStateBase &val) override
     {
-        _pcState = val;
+        set(_pcState, val);
     }
 
-    Addr instAddr() const override  { return _pcState.instAddr(); }
-    MicroPC microPC() const override { return _pcState.microPC(); }
+    Addr instAddr() const override  { return _pcState->instAddr(); }
+    MicroPC microPC() const override { return _pcState->microPC(); }
     bool readPredicate() const { return predicate; }
     void setPredicate(bool val) { predicate = val; }
 

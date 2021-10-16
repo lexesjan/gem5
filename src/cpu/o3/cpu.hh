@@ -332,10 +332,10 @@ class CPU : public BaseCPU
     void setArchReg(const RegId &reg, const void *val, ThreadID tid);
 
     /** Sets the commit PC state of a specific thread. */
-    void pcState(const TheISA::PCState &newPCState, ThreadID tid);
+    void pcState(const PCStateBase &new_pc_state, ThreadID tid);
 
     /** Reads the commit PC state of a specific thread. */
-    TheISA::PCState pcState(ThreadID tid);
+    const PCStateBase &pcState(ThreadID tid);
 
     /** Reads the commit PC of a specific thread. */
     Addr instAddr(ThreadID tid);

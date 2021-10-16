@@ -181,7 +181,7 @@ ThreadContext::setReg(const RegId &reg, const void *val)
 }
 
 void
-ThreadContext::pcState(const TheISA::PCState &val)
+ThreadContext::pcState(const PCStateBase &val)
 {
     cpu->pcState(val, thread->threadId());
 
@@ -189,7 +189,7 @@ ThreadContext::pcState(const TheISA::PCState &val)
 }
 
 void
-ThreadContext::pcStateNoRecord(const TheISA::PCState &val)
+ThreadContext::pcStateNoRecord(const PCStateBase &val)
 {
     cpu->pcState(val, thread->threadId());
 

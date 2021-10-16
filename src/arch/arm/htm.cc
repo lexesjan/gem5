@@ -86,7 +86,7 @@ ArmISA::HTMCheckpoint::save(ThreadContext *tc)
         tc->getReg(vecPredRegClass[n], &p[n]);
     fpcr = tc->readMiscReg(MISCREG_FPCR);
     fpsr = tc->readMiscReg(MISCREG_FPSR);
-    pcstateckpt = tc->pcState();
+    pcstateckpt = tc->pcState().as<PCState>();
 
     BaseHTMCheckpoint::save(tc);
 }

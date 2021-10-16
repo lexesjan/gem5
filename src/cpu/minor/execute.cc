@@ -222,7 +222,7 @@ Execute::tryToBranch(MinorDynInstPtr inst, Fault fault, BranchData &branch)
 {
     ThreadContext *thread = cpu.getContext(inst->id.threadId);
     const std::unique_ptr<PCStateBase> pc_before(inst->pc->clone());
-    TheISA::PCState target = thread->pcState();
+    std::unique_ptr<PCStateBase> target(thread->pcState().clone());
 
     /* Force a branch for SerializeAfter/SquashAfter instructions
      * at the end of micro-op sequence when we're not suspended */
@@ -233,10 +233,10 @@ Execute::tryToBranch(MinorDynInstPtr inst, Fault fault, BranchData &branch)
          inst->staticInst->isSquashAfter());
 
     DPRINTF(Branch, "tryToBranch before: %s after: %s%s\n",
-        *pc_before, target, (force_branch ? " (forcing)" : ""));
+        *pc_before, *target, (force_branch ? " (forcing)" : ""));
 
     /* Will we change the PC to something other than the next instruction? */
-    bool must_branch = *pc_before != target ||
+    bool must_branch = *pc_before != *target ||
         fault != NoFault ||
         force_branch;
 
@@ -244,11 +244,11 @@ Execute::tryToBranch(MinorDynInstPtr inst, Fault fault, BranchData &branch)
     BranchData::Reason reason = BranchData::NoBranch;
 
     if (fault == NoFault) {
-        inst->staticInst->advancePC(target);
-        thread->pcState(target);
+        inst->staticInst->advancePC(*target);
+        thread->pcState(*target);
 
         DPRINTF(Branch, "Advancing current PC from: %s to: %s\n",
-            *pc_before, target);
+            *pc_before, *target);
     }
 
     if (inst->predictedTaken && !force_branch) {
@@ -262,7 +262,7 @@ Execute::tryToBranch(MinorDynInstPtr inst, Fault fault, BranchData &branch)
                 *inst);
 
             reason = BranchData::BadlyPredictedBranch;
-        } else if (*inst->predictedTarget == target) {
+        } else if (*inst->predictedTarget == *target) {
             /* Branch prediction got the right target, kill the branch and
              *  carry on.
              *  Note that this information to the branch predictor might get
@@ -278,14 +278,14 @@ Execute::tryToBranch(MinorDynInstPtr inst, Fault fault, BranchData &branch)
             DPRINTF(Branch, "Predicted a branch from 0x%x to 0x%x"
                     " but got the wrong target (actual: 0x%x) inst: %s\n",
                     inst->pc->instAddr(), inst->predictedTarget->instAddr(),
-                    target.instAddr(), *inst);
+                    target->instAddr(), *inst);
 
             reason = BranchData::BadlyPredictedBranchTarget;
         }
     } else if (must_branch) {
         /* Unpredicted branch */
         DPRINTF(Branch, "Unpredicted branch from 0x%x to 0x%x inst: %s\n",
-            inst->pc->instAddr(), target.instAddr(), *inst);
+            inst->pc->instAddr(), target->instAddr(), *inst);
 
         reason = BranchData::UnpredictedBranch;
     } else {
@@ -293,14 +293,14 @@ Execute::tryToBranch(MinorDynInstPtr inst, Fault fault, BranchData &branch)
         reason = BranchData::NoBranch;
     }
 
-    updateBranchData(inst->id.threadId, reason, inst, target, branch);
+    updateBranchData(inst->id.threadId, reason, inst, target.get(), branch);
 }
 
 void
 Execute::updateBranchData(
     ThreadID tid,
     BranchData::Reason reason,
-    MinorDynInstPtr inst, const TheISA::PCState &target,
+    MinorDynInstPtr inst, const PCStateBase *target,
     BranchData &branch)
 {
     if (reason != BranchData::NoBranch) {
@@ -440,7 +440,7 @@ Execute::takeInterrupt(ThreadID thread_id, BranchData &branch)
         /* Assume that an interrupt *must* cause a branch.  Assert this? */
 
         updateBranchData(thread_id, BranchData::Interrupt,
-            MinorDynInst::bubble(), cpu.getContext(thread_id)->pcState(),
+            MinorDynInst::bubble(), &cpu.getContext(thread_id)->pcState(),
             branch);
     }
 
@@ -462,7 +462,7 @@ Execute::executeMemRefInst(MinorDynInstPtr inst, BranchData &branch,
         issued = false;
     } else {
         ThreadContext *thread = cpu.getContext(inst->id.threadId);
-        TheISA::PCState old_pc = thread->pcState();
+        std::unique_ptr<PCStateBase> old_pc(thread->pcState().clone());
 
         ExecContext context(cpu, *cpu.threads[inst->id.threadId], *this, inst);
 
@@ -513,7 +513,7 @@ Execute::executeMemRefInst(MinorDynInstPtr inst, BranchData &branch,
         }
 
         /* Restore thread PC */
-        thread->pcState(old_pc);
+        thread->pcState(*old_pc);
         issued = true;
     }
 
@@ -1015,7 +1015,7 @@ Execute::commitInst(MinorDynInstPtr inst, bool early_memory_issue,
             !isInterrupted(thread_id)) /* Don't suspend if we have
                 interrupts */
         {
-            TheISA::PCState resume_pc = cpu.getContext(thread_id)->pcState();
+            auto &resume_pc = cpu.getContext(thread_id)->pcState();
 
             assert(resume_pc.microPC() == 0);
 
@@ -1025,7 +1025,7 @@ Execute::commitInst(MinorDynInstPtr inst, bool early_memory_issue,
             cpu.stats.numFetchSuspends++;
 
             updateBranchData(thread_id, BranchData::SuspendThread, inst,
-                resume_pc, branch);
+                &resume_pc, branch);
         }
     }
 
@@ -1133,7 +1133,7 @@ Execute::commit(ThreadID thread_id, bool only_commit_microops, bool discard,
 
             /* Branch as there was a change in PC */
             updateBranchData(thread_id, BranchData::UnpredictedBranch,
-                MinorDynInst::bubble(), thread->pcState(), branch);
+                MinorDynInst::bubble(), &thread->pcState(), branch);
         } else if (mem_response &&
             num_mem_refs_committed < memoryCommitLimit)
         {
@@ -1488,7 +1488,7 @@ Execute::evaluate()
              *  the bag */
             if (commit_info.drainState == DrainHaltFetch) {
                 updateBranchData(commit_tid, BranchData::HaltFetch,
-                        MinorDynInst::bubble(), TheISA::PCState(0), branch);
+                        MinorDynInst::bubble(), nullptr, branch);
 
                 cpu.wakeupOnEvent(Pipeline::ExecuteStageId);
                 setDrainState(commit_tid, DrainAllInsts);

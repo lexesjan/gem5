@@ -87,7 +87,7 @@ X86NativeTrace::ThreadState::update(ThreadContext *tc)
     r13 = tc->getReg(X86ISA::int_reg::R13);
     r14 = tc->getReg(X86ISA::int_reg::R14);
     r15 = tc->getReg(X86ISA::int_reg::R15);
-    rip = tc->pcState().npc();
+    rip = tc->pcState().as<X86ISA::PCState>().npc();
     //This should be expanded if x87 registers are considered
     for (int i = 0; i < 8; i++)
         mmx[i] = tc->getReg(X86ISA::float_reg::mmx(i));

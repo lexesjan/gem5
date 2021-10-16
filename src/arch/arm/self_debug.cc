@@ -89,7 +89,7 @@ SelfDebug::testBreakPoints(ThreadContext *tc, Addr vaddr)
 
     ExceptionLevel el = (ExceptionLevel) currEL(tc);
     for (auto &p: arBrkPoints){
-        PCState pcst = tc->pcState();
+        PCState pcst = tc->pcState().as<PCState>();
         Addr pc = vaddr;
         if (pcst.itstate() != 0x0)
             pc = pcst.pc();
@@ -676,18 +676,19 @@ SoftwareStep::debugExceptionReturnSS(ThreadContext *tc, CPSR spsr,
 bool
 SoftwareStep::advanceSS(ThreadContext * tc)
 {
-
-    PCState pc = tc->pcState();
+    PCState pc = tc->pcState().as<PCState>();
     bool res = false;
     switch (stateSS) {
       case INACTIVE_STATE:
         pc.debugStep(false);
+        //XXX PC not stored back?
         break;
 
       case ACTIVE_NOT_PENDING_STATE:
         pc.debugStep(false);
         if (cpsrD == 1 || !bSS) {
             stateSS = INACTIVE_STATE;
+            //XXX PC not stored back?
         } else {
             pc.stepped(true);
             stateSS = ACTIVE_PENDING_STATE;

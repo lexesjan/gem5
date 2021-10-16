@@ -223,7 +223,7 @@ RemoteGDB::AArch64GdbRegCache::getRegs(ThreadContext *context)
     for (int i = 0; i < 31; ++i)
         r.x[i] = context->getReg(int_reg::x(i));
     r.spx = context->getReg(int_reg::Spx);
-    r.pc = context->pcState().pc();
+    r.pc = context->pcState().instAddr();
     r.cpsr = context->readMiscRegNoEffect(MISCREG_CPSR);
 
     size_t base = 0;
@@ -247,7 +247,7 @@ RemoteGDB::AArch64GdbRegCache::setRegs(ThreadContext *context) const
 
     for (int i = 0; i < 31; ++i)
         context->setReg(int_reg::x(i), r.x[i]);
-    auto pc_state = context->pcState();
+    auto pc_state = context->pcState().as<PCState>();
     pc_state.set(r.pc);
     context->pcState(pc_state);
     context->setMiscRegNoEffect(MISCREG_CPSR, r.cpsr);
@@ -290,7 +290,7 @@ RemoteGDB::AArch32GdbRegCache::getRegs(ThreadContext *context)
     r.gpr[12] = context->getReg(int_reg::R12);
     r.gpr[13] = context->getReg(int_reg::Sp);
     r.gpr[14] = context->getReg(int_reg::Lr);
-    r.gpr[15] = context->pcState().pc();
+    r.gpr[15] = context->pcState().instAddr();
     r.cpsr = context->readMiscRegNoEffect(MISCREG_CPSR);
 
     // One day somebody will implement transfer of FPRs correctly.
@@ -320,7 +320,7 @@ RemoteGDB::AArch32GdbRegCache::setRegs(ThreadContext *context) const
     context->setReg(int_reg::R12, r.gpr[12]);
     context->setReg(int_reg::Sp, r.gpr[13]);
     context->setReg(int_reg::Lr, r.gpr[14]);
-    auto pc_state = context->pcState();
+    PCState pc_state = context->pcState().as<PCState>();
     pc_state.set(r.gpr[15]);
     context->pcState(pc_state);
 

@@ -178,7 +178,7 @@ RemoteGDB::SPARCGdbRegCache::getRegs(ThreadContext *context)
     DPRINTF(GDBAcc, "getRegs in remotegdb \n");
     for (int i = 0; i < 32; i++)
         r.gpr[i] = htobe((uint32_t)context->getReg(intRegClass[i]));
-    PCState pc = context->pcState();
+    auto &pc = context->pcState().as<SparcISA::PCState>();
     r.pc = htobe((uint32_t)pc.pc());
     r.npc = htobe((uint32_t)pc.npc());
     r.y = htobe((uint32_t)context->getReg(int_reg::Y));
@@ -196,7 +196,7 @@ RemoteGDB::SPARC64GdbRegCache::getRegs(ThreadContext *context)
         r.gpr[i] = htobe(context->getReg(intRegClass[i]));
     for (int i = 0; i < 32; i++)
         r.fpr[i] = 0;
-    PCState pc = context->pcState();
+    auto &pc = context->pcState().as<SparcISA::PCState>();
     r.pc = htobe(pc.pc());
     r.npc = htobe(pc.npc());
     r.fsr = htobe(context->readMiscReg(MISCREG_FSR));
