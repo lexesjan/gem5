@@ -706,7 +706,7 @@ X86KvmCPU::updateKvmStateRegs()
     FOREACH_IREG();
 #undef APPLY_IREG
 
-    regs.rip = tc->instAddr() - tc->readMiscReg(misc_reg::CsBase);
+    regs.rip = tc->pcState().instAddr() - tc->readMiscReg(misc_reg::CsBase);
 
     /* You might think that setting regs.rflags to the contents
      * misc_reg::Rflags here would suffice. In that case you're

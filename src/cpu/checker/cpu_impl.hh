@@ -227,7 +227,7 @@ Checker<DynInstPtr>::verify(const DynInstPtr &completed_inst)
         uint64_t fetchOffset = 0;
         bool fetchDone = false;
         while (!fetchDone) {
-            Addr fetch_PC = thread->instAddr();
+            Addr fetch_PC = thread->pcState().instAddr();
             fetch_PC = (fetch_PC & pc_mask) + fetchOffset;
 
             // If not in the middle of a macro instruction
@@ -239,7 +239,7 @@ Checker<DynInstPtr>::verify(const DynInstPtr &completed_inst)
 
                 mem_req->setVirt(fetch_PC, decoder.moreBytesSize(),
                                  Request::INST_FETCH, requestorId,
-                                 thread->instAddr());
+                                 thread->pcState().instAddr());
 
                 fault = mmu->translateFunctional(
                     mem_req, tc, BaseMMU::Execute);
@@ -401,10 +401,10 @@ Checker<DynInstPtr>::verify(const DynInstPtr &completed_inst)
             Addr oldpc;
             int count = 0;
             do {
-                oldpc = thread->instAddr();
+                oldpc = thread->pcState().instAddr();
                 thread->pcEventQueue.service(oldpc, tc);
                 count++;
-            } while (oldpc != thread->instAddr());
+            } while (oldpc != thread->pcState().instAddr());
             if (count > 1) {
                 willChangePC = true;
                 set(newPCState, thread->pcState());
@@ -445,7 +445,7 @@ template <class DynInstPtr>
 void
 Checker<DynInstPtr>::validateInst(const DynInstPtr &inst)
 {
-    if (inst->instAddr() != thread->instAddr()) {
+    if (inst->pcState().instAddr() != thread->pcState().instAddr()) {
         warn("%lli: PCs do not match! Inst: %s, checker: %s",
              curTick(), inst->pcState(), thread->pcState());
         if (changedPC) {
@@ -551,7 +551,8 @@ Checker<DynInstPtr>::validateState()
     if (updateThisCycle) {
         // Change this back to warn if divergences end up being false positives
         panic("%lli: Instruction PC %#x results didn't match up, copying all "
-             "registers from main CPU", curTick(), unverifiedInst->instAddr());
+             "registers from main CPU", curTick(),
+             unverifiedInst->pcState().instAddr());
 
         // Terribly convoluted way to make sure O3 model does not implode
         bool no_squash_from_TC = unverifiedInst->thread->noSquashFromTC;

@@ -273,7 +273,6 @@ class CheckerCPU : public BaseCPU, public ExecContext
                          val, thread->pcState());
         thread->pcState(val);
     }
-    Addr instAddr() { return thread->instAddr(); }
     //////////////////////////////////////////
 
     RegVal
