@@ -251,6 +251,8 @@ class Decoder : public InstDecoder
     /// @retval A pointer to the corresponding StaticInst object.
     StaticInstPtr decode(ExtMachInst mach_inst, Addr addr);
 
+    void process();
+
   public:
     Decoder(BaseISA *isa=nullptr) : InstDecoder(&fetchChunk)
     {
@@ -309,8 +311,6 @@ class Decoder : public InstDecoder
         InstDecoder::reset();
         state = ResetState;
     }
-
-    void process();
 
     // Use this to give data to the decoder. This should be used
     // when there is control flow.
