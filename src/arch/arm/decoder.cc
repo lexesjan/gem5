@@ -55,14 +55,15 @@ namespace ArmISA
 
 GenericISA::BasicDecodeCache<Decoder, ExtMachInst> Decoder::defaultCache;
 
-Decoder::Decoder(BaseISA* isa)
-    : InstDecoder(&data), data(0), fpscrLen(0), fpscrStride(0),
-      decoderFlavor(safe_cast<ISA *>(isa)->decoderFlavor())
+Decoder::Decoder(const ArmDecoderParams &params)
+    : InstDecoder(params, &data), data(0), fpscrLen(0), fpscrStride(0),
+      decoderFlavor(dynamic_cast<ISA *>(params.isa)->decoderFlavor())
 {
     reset();
 
     // Initialize SVE vector length
-    sveLen = (safe_cast<ISA *>(isa)->getCurSveVecLenInBitsAtReset() >> 7) - 1;
+    sveLen = (dynamic_cast<ISA *>(params.isa)
+            ->getCurSveVecLenInBitsAtReset() >> 7) - 1;
 }
 
 void

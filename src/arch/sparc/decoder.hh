@@ -34,6 +34,7 @@
 #include "arch/sparc/types.hh"
 #include "cpu/static_inst.hh"
 #include "debug/Decode.hh"
+#include "params/SparcDecoder.hh"
 
 namespace gem5
 {
@@ -52,7 +53,8 @@ class Decoder : public InstDecoder
     RegVal asi = 0;
 
   public:
-    Decoder(BaseISA* isa=nullptr) : InstDecoder(&machInst) {}
+    Decoder(const SparcDecoderParams &p) : InstDecoder(p, &machInst)
+    {}
 
     // Use this to give data to the predecoder. This should be used
     // when there is control flow.

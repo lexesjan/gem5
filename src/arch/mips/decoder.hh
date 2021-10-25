@@ -36,6 +36,7 @@
 #include "base/types.hh"
 #include "cpu/static_inst.hh"
 #include "debug/Decode.hh"
+#include "params/MipsDecoder.hh"
 
 namespace gem5
 {
@@ -53,7 +54,7 @@ class Decoder : public InstDecoder
     uint32_t machInst;
 
   public:
-    Decoder(BaseISA* isa=nullptr) : InstDecoder(&machInst)
+    Decoder(const MipsDecoderParams &p) : InstDecoder(p, &machInst)
     {}
 
     //Use this to give data to the decoder. This should be used
