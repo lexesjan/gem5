@@ -61,12 +61,6 @@ class Decoder : public InstDecoder
     {
     }
 
-    void
-    reset()
-    {
-        instDone = false;
-    }
-
     //Use this to give data to the decoder. This should be used
     //when there is control flow.
     void

@@ -134,7 +134,7 @@ class Decoder : public InstDecoder
     Decoder(BaseISA* isa = nullptr);
 
     /** Reset the decoders internal state. */
-    void reset();
+    void reset() override;
 
     /**
      * Feed data to the decoder.

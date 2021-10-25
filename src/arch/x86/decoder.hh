@@ -303,7 +303,12 @@ class Decoder : public InstDecoder
         stack = old->stack;
     }
 
-    void reset() { state = ResetState; }
+    void
+    reset() override
+    {
+        InstDecoder::reset();
+        state = ResetState;
+    }
 
     void process();
 
