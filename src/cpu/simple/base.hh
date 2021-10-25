@@ -127,6 +127,8 @@ class BaseSimpleCPU : public BaseCPU
      */
     void traceFault();
 
+    std::unique_ptr<PCStateBase> preExecuteTempPC;
+
   public:
     void checkForInterrupts();
     void setupFetchRequest(const RequestPtr &req);
