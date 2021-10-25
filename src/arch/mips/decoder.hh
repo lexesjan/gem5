@@ -86,7 +86,7 @@ class Decoder : public InstDecoder
 
   public:
     StaticInstPtr
-    decode(PCStateBase &next_pc)
+    decode(PCStateBase &next_pc) override
     {
         if (!instDone)
             return NULL;
