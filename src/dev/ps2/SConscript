@@ -37,9 +37,6 @@
 
 Import('*')
 
-if env['TARGET_ISA'] == 'null':
-    Return()
-
 SimObject('PS2.py')
 Source('device.cc')
 Source('keyboard.cc')

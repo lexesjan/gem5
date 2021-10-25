@@ -37,9 +37,6 @@
 
 Import('*')
 
-if env['TARGET_ISA'] == 'null':
-    Return()
-
 SimObject('VirtIO.py')
 SimObject('VirtIOConsole.py')
 SimObject('VirtIOBlock.py')

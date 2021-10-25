@@ -37,8 +37,5 @@
 
 Import('*')
 
-if env['TARGET_ISA'] == 'null':
-    Return()
-
 SimObject('I2C.py')
 Source('bus.cc')

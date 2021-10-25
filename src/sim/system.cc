@@ -55,9 +55,7 @@
 #include "cpu/kvm/base.hh"
 #include "cpu/kvm/vm.hh"
 #endif
-#if !IS_NULL_ISA
 #include "cpu/base.hh"
-#endif
 #include "cpu/thread_context.hh"
 #include "debug/Loader.hh"
 #include "debug/Quiesce.hh"
@@ -78,10 +76,8 @@ std::vector<System *> System::systemList;
 void
 System::Threads::Thread::resume()
 {
-#   if !IS_NULL_ISA
     DPRINTFS(Quiesce, context->getCpuPtr(), "activating\n");
     context->activate();
-#   endif
 }
 
 std::string
@@ -134,13 +130,11 @@ System::Threads::replace(ThreadContext *tc, ContextID id)
 {
     auto &t = thread(id);
     panic_if(!t.context, "Can't replace a context which doesn't exist.");
-#   if !IS_NULL_ISA
     if (t.resumeEvent->scheduled()) {
         Tick when = t.resumeEvent->when();
         t.context->getCpuPtr()->deschedule(t.resumeEvent);
         tc->getCpuPtr()->schedule(t.resumeEvent, when);
     }
-#   endif
     t.context = tc;
 }
 
@@ -172,17 +166,14 @@ void
 System::Threads::quiesce(ContextID id)
 {
     auto &t = thread(id);
-#   if !IS_NULL_ISA
     [[maybe_unused]] BaseCPU *cpu = t.context->getCpuPtr();
     DPRINTFS(Quiesce, cpu, "quiesce()\n");
-#   endif
     t.quiesce();
 }
 
 void
 System::Threads::quiesceTick(ContextID id, Tick when)
 {
-#   if !IS_NULL_ISA
     auto &t = thread(id);
     BaseCPU *cpu = t.context->getCpuPtr();
 
@@ -190,7 +181,6 @@ System::Threads::quiesceTick(ContextID id, Tick when)
     t.quiesce();
 
     cpu->reschedule(t.resumeEvent, when, true);
-#   endif
 }
 
 int System::numSystemsRunning = 0;
@@ -409,9 +399,7 @@ System::unserialize(CheckpointIn &cp)
                 !when || !t.resumeEvent) {
             continue;
         }
-#       if !IS_NULL_ISA
         t.context->getCpuPtr()->schedule(t.resumeEvent, when);
-#       endif
     }
 
     // also unserialize the memories in the system

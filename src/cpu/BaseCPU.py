@@ -87,9 +87,10 @@ elif buildEnv['TARGET_ISA'] == 'riscv':
     from m5.objects.RiscvISA import RiscvISA as ArchISA
     from m5.objects.RiscvDecoder import RiscvDecoder as ArchDecoder
 else:
-    print("Don't know what object types to use for ISA %s" %
-            buildEnv['TARGET_ISA'])
-    sys.exit(1)
+    ArchMMU = None
+    ArchInterrupts = None
+    ArchISA = None
+    ArchDecoder = None
 
 class BaseCPU(ClockedObject):
     type = 'BaseCPU'
@@ -155,7 +156,8 @@ class BaseCPU(ClockedObject):
 
     workload = VectorParam.Process([], "processes to run")
 
-    mmu = Param.BaseMMU(ArchMMU(), "CPU memory management unit")
+    mmu = Param.BaseMMU(ArchMMU() if ArchMMU else NULL,
+                        "CPU memory management unit")
     if buildEnv['TARGET_ISA'] == 'power':
         UnifiedTLB = Param.Bool(True, "Is this a Unified TLB?")
     interrupts = VectorParam.BaseInterrupts([], "Interrupt Controller")
@@ -181,7 +183,8 @@ class BaseCPU(ClockedObject):
     dcache_port = RequestPort("Data Port")
     _cached_ports = ['icache_port', 'dcache_port']
 
-    _cached_ports += ArchMMU.walkerPorts()
+    if ArchMMU:
+        _cached_ports += ArchMMU.walkerPorts()
 
     _uncached_interrupt_response_ports = []
     _uncached_interrupt_request_ports = []
@@ -223,12 +226,12 @@ class BaseCPU(ClockedObject):
                     iwc.cpu_side, dwc.cpu_side)
                 self._cached_ports += ["itb_walker_cache.mem_side", \
                                        "dtb_walker_cache.mem_side"]
-            else:
+            elif ArchMMU:
                 self._cached_ports += ArchMMU.walkerPorts()
 
             # Checker doesn't need its own tlb caches because it does
             # functional accesses only
-            if self.checker != NULL:
+            if self.checker != NULL and ArchMMU:
                 self._cached_ports += [ "checker." + port
                     for port in ArchMMU.walkerPorts() ]
 

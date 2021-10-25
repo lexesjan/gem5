@@ -43,9 +43,6 @@ DebugFlag('DMA')
 SimObject('Platform.py')
 Source('platform.cc')
 
-if env['TARGET_ISA'] == 'null':
-    Return()
-
 SimObject('BadDevice.py')
 
 Source('baddev.cc')
