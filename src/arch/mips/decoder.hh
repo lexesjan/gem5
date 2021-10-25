@@ -76,12 +76,6 @@ class Decoder : public InstDecoder
         instDone = true;
     }
 
-    bool
-    needMoreBytes()
-    {
-        return true;
-    }
-
     void takeOverFrom(Decoder *old) {}
 
   protected:

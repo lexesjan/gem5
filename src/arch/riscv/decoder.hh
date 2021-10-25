@@ -52,7 +52,6 @@ class Decoder : public InstDecoder
     decode_cache::InstMap<ExtMachInst> instMap;
     bool aligned;
     bool mid;
-    bool more;
 
   protected:
     //The extended machine instruction being generated
@@ -78,7 +77,6 @@ class Decoder : public InstDecoder
     //when there is control flow.
     void moreBytes(const PCStateBase &pc, Addr fetchPC);
 
-    bool needMoreBytes() { return more; }
     void takeOverFrom(Decoder *old) {}
 
     StaticInstPtr decode(PCStateBase &nextPC);
