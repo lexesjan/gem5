@@ -58,7 +58,6 @@ class Decoder : public InstDecoder
     //The extended machine instruction being generated
     ExtMachInst emi;
     uint32_t machInst;
-    bool instDone;
 
     StaticInstPtr decodeInst(ExtMachInst mach_inst);
 
@@ -80,7 +79,6 @@ class Decoder : public InstDecoder
     void moreBytes(const PCStateBase &pc, Addr fetchPC);
 
     bool needMoreBytes() { return more; }
-    bool instReady() { return instDone; }
     void takeOverFrom(Decoder *old) {}
 
     StaticInstPtr decode(PCStateBase &nextPC);

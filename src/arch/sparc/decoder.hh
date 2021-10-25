@@ -49,7 +49,6 @@ class Decoder : public InstDecoder
     // The extended machine instruction being generated
     ExtMachInst emi;
     uint32_t machInst;
-    bool instDone = false;
     RegVal asi = 0;
 
   public:
@@ -87,12 +86,6 @@ class Decoder : public InstDecoder
     needMoreBytes()
     {
         return true;
-    }
-
-    bool
-    instReady()
-    {
-        return instDone;
     }
 
     void
