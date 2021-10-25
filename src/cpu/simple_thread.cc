@@ -80,7 +80,7 @@ SimpleThread::SimpleThread(BaseCPU *_cpu, int _thread_num, System *_sys,
       isa(_isa),
       predicate(true), memAccPredicate(true),
       comInstEventQueue("instruction-based event queue"),
-      system(_sys), mmu(_mmu), decoder(isa),
+      system(_sys), mmu(_mmu), decoder(new TheISA::Decoder(isa)),
       htmTransactionStarts(0), htmTransactionStops(0)
 {
     clearArchRegs();
@@ -95,7 +95,7 @@ void
 SimpleThread::takeOverFrom(ThreadContext *oldContext)
 {
     gem5::takeOverFrom(*this, *oldContext);
-    decoder.takeOverFrom(oldContext->getDecoderPtr());
+    decoder->takeOverFrom(oldContext->getDecoderPtr());
 
     isa->takeOverFrom(this, oldContext);
 

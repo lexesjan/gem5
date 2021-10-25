@@ -963,7 +963,8 @@ ISA::setMiscReg(RegIndex idx, RegVal val)
         pc.illegalExec(cpsr.il == 1);
         selfDebug->setDebugMask(cpsr.d == 1);
 
-        tc->getDecoderPtr()->setSveLen((getCurSveVecLenInBits() >> 7) - 1);
+        tc->getDecoderPtr()->as<Decoder>().setSveLen(
+                (getCurSveVecLenInBits() >> 7) - 1);
 
         // Follow slightly different semantics if a CheckerCPU object
         // is connected
@@ -1129,7 +1130,7 @@ ISA::setMiscReg(RegIndex idx, RegVal val)
                 newVal = (newVal & (uint32_t)fpscrMask) |
                          (readMiscRegNoEffect(MISCREG_FPSCR) &
                           ~(uint32_t)fpscrMask);
-                tc->getDecoderPtr()->setContext(newVal);
+                tc->getDecoderPtr()->as<Decoder>().setContext(newVal);
             }
             break;
           case MISCREG_FPSR:
@@ -2491,7 +2492,8 @@ ISA::setMiscReg(RegIndex idx, RegVal val)
           case MISCREG_ZCR_EL3:
           case MISCREG_ZCR_EL2:
           case MISCREG_ZCR_EL1:
-            tc->getDecoderPtr()->setSveLen((getCurSveVecLenInBits() >> 7) - 1);
+            tc->getDecoderPtr()->as<Decoder>().setSveLen(
+                    (getCurSveVecLenInBits() >> 7) - 1);
             break;
         }
         setMiscRegNoEffect(idx, newVal);

@@ -67,6 +67,7 @@ class BaseMMU;
 class BaseTLB;
 class CheckerCPU;
 class Checkpoint;
+class InstDecoder;
 class PortProxy;
 class Process;
 class System;
@@ -142,7 +143,7 @@ class ThreadContext : public PCEventScope
 
     virtual BaseISA *getIsaPtr() const = 0;
 
-    virtual TheISA::Decoder *getDecoderPtr() = 0;
+    virtual InstDecoder *getDecoderPtr() = 0;
 
     virtual System *getSystemPtr() = 0;
 

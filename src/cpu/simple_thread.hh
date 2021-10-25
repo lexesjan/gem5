@@ -191,7 +191,7 @@ class SimpleThread : public ThreadState, public ThreadContext
 
     BaseMMU *mmu;
 
-    TheISA::Decoder decoder;
+    InstDecoder *decoder;
 
     // hardware transactional memory
     int64_t htmTransactionStarts;
@@ -270,7 +270,7 @@ class SimpleThread : public ThreadState, public ThreadContext
 
     BaseISA *getIsaPtr() const override { return isa; }
 
-    TheISA::Decoder *getDecoderPtr() override { return &decoder; }
+    InstDecoder *getDecoderPtr() override { return decoder; }
 
     System *getSystemPtr() override { return system; }
 

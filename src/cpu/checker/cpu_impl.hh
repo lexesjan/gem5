@@ -69,7 +69,7 @@ Checker<DynInstPtr>::advancePC(const Fault &fault)
     if (fault != NoFault) {
         curMacroStaticInst = nullStaticInstPtr;
         fault->invoke(tc, curStaticInst);
-        thread->decoder.reset();
+        thread->decoder->reset();
     } else {
         if (curStaticInst) {
             if (curStaticInst->isLastMicroop())
@@ -111,7 +111,7 @@ Checker<DynInstPtr>::handlePendingInt()
               "a non-interuptable instruction!", curTick());
     }
     boundaryInst = NULL;
-    thread->decoder.reset();
+    thread->decoder->reset();
     curMacroStaticInst = nullStaticInstPtr;
 }
 
@@ -182,7 +182,7 @@ Checker<DynInstPtr>::verify(const DynInstPtr &completed_inst)
     inst = NULL;
 
     auto &decoder = thread->decoder;
-    const Addr pc_mask = decoder.pcMask();
+    const Addr pc_mask = decoder->pcMask();
 
     // Try to check all instructions that are completed, ending if we
     // run out of instructions to check or if an instruction is not
@@ -232,10 +232,10 @@ Checker<DynInstPtr>::verify(const DynInstPtr &completed_inst)
             if (!curMacroStaticInst) {
                 // set up memory request for instruction fetch
                 auto mem_req = std::make_shared<Request>(
-                    fetch_PC, decoder.moreBytesSize(), 0, requestorId,
+                    fetch_PC, decoder->moreBytesSize(), 0, requestorId,
                     fetch_PC, thread->contextId());
 
-                mem_req->setVirt(fetch_PC, decoder.moreBytesSize(),
+                mem_req->setVirt(fetch_PC, decoder->moreBytesSize(),
                                  Request::INST_FETCH, requestorId,
                                  thread->pcState().instAddr());
 
@@ -269,7 +269,7 @@ Checker<DynInstPtr>::verify(const DynInstPtr &completed_inst)
                 } else {
                     PacketPtr pkt = new Packet(mem_req, MemCmd::ReadReq);
 
-                    pkt->dataStatic(decoder.moreBytesPtr());
+                    pkt->dataStatic(decoder->moreBytesPtr());
                     icachePort->sendFunctional(pkt);
 
                     delete pkt;
@@ -282,7 +282,7 @@ Checker<DynInstPtr>::verify(const DynInstPtr &completed_inst)
 
                 if (isRomMicroPC(pc_state->microPC())) {
                     fetchDone = true;
-                    curStaticInst = decoder.fetchRomMicroop(
+                    curStaticInst = decoder->fetchRomMicroop(
                             pc_state->microPC(), nullptr);
                 } else if (!curMacroStaticInst) {
                     //We're not in the middle of a macro instruction
@@ -292,18 +292,18 @@ Checker<DynInstPtr>::verify(const DynInstPtr &completed_inst)
                     //If more fetch data is needed, pass it in.
                     Addr fetch_pc =
                         (pc_state->instAddr() & pc_mask) + fetchOffset;
-                    decoder.moreBytes(*pc_state, fetch_pc);
+                    decoder->moreBytes(*pc_state, fetch_pc);
 
                     //If an instruction is ready, decode it.
                     //Otherwise, we'll have to fetch beyond the
                     //memory chunk at the current pc.
-                    if (decoder.instReady()) {
+                    if (decoder->instReady()) {
                         fetchDone = true;
-                        instPtr = decoder.decode(*pc_state);
+                        instPtr = decoder->decode(*pc_state);
                         thread->pcState(*pc_state);
                     } else {
                         fetchDone = false;
-                        fetchOffset += decoder.moreBytesSize();
+                        fetchOffset += decoder->moreBytesSize();
                     }
 
                     //If we decoded an instruction and it's microcoded,
@@ -324,7 +324,7 @@ Checker<DynInstPtr>::verify(const DynInstPtr &completed_inst)
             }
         }
         // reset decoder on Checker
-        decoder.reset();
+        decoder->reset();
 
         // Check Checker and CPU get same instruction, and record
         // any faults the CPU may have had.
