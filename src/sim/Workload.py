@@ -37,6 +37,15 @@ class Workload(SimObject):
     wait_for_remote_gdb = Param.Bool(False,
         "Wait for a remote GDB connection");
 
+class StubWorkload(Workload):
+    type = 'StubWorkload'
+    cxx_header = "sim/workload.hh"
+    cxx_class = 'gem5::StubWorkload'
+
+    entry = Param.Addr(0, 'Dummy entry point for this workload.')
+    byte_order = Param.ByteOrder('little',
+            'Dummy byte order for this workload.')
+
 class KernelWorkload(Workload):
     type = 'KernelWorkload'
     cxx_header = "sim/kernel_workload.hh"

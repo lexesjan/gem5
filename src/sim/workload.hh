@@ -34,6 +34,7 @@
 #include "base/loader/object_file.hh"
 #include "base/loader/symtab.hh"
 #include "enums/ByteOrder.hh"
+#include "params/StubWorkload.hh"
 #include "params/Workload.hh"
 #include "sim/sim_object.hh"
 #include "sim/stats.hh"
@@ -159,6 +160,30 @@ class Workload : public SimObject
         return e;
     }
     /** @} */
+};
+
+class StubWorkload : public Workload
+{
+  private:
+    PARAMS(StubWorkload);
+    loader::SymbolTable _symtab;
+
+  public:
+    StubWorkload(const StubWorkloadParams &params) : Workload(params) {}
+
+    Addr getEntry() const override { return params().entry; }
+    ByteOrder byteOrder() const override { return params().byte_order; }
+    loader::Arch getArch() const override { return loader::UnknownArch; }
+    const loader::SymbolTable &
+    symtab(ThreadContext *tc) override
+    {
+        return _symtab;
+    }
+    bool
+    insertSymbol(const loader::Symbol &symbol) override
+    {
+        return _symtab.insert(symbol);
+    }
 };
 
 } // namespace gem5
