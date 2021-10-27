@@ -33,6 +33,7 @@
 
 #include "base/loader/object_file.hh"
 #include "base/loader/symtab.hh"
+#include "enums/ByteOrder.hh"
 #include "params/Workload.hh"
 #include "sim/sim_object.hh"
 #include "sim/stats.hh"
@@ -97,6 +98,7 @@ class Workload : public SimObject
     void startup() override;
 
     virtual Addr getEntry() const = 0;
+    virtual ByteOrder byteOrder() const = 0;
     virtual loader::Arch getArch() const = 0;
 
     virtual const loader::SymbolTable &symtab(ThreadContext *tc) = 0;

@@ -67,6 +67,7 @@ class SEWorkload(Workload, metaclass=SEWorkloadMeta):
     type = 'SEWorkload'
     cxx_header = "sim/se_workload.hh"
     cxx_class = 'gem5::SEWorkload'
+    abstract = True
 
     @classmethod
     def _is_compatible_with(cls, obj):
