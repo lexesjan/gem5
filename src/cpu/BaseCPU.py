@@ -158,8 +158,6 @@ class BaseCPU(ClockedObject):
 
     mmu = Param.BaseMMU(ArchMMU() if ArchMMU else NULL,
                         "CPU memory management unit")
-    if buildEnv['TARGET_ISA'] == 'power':
-        UnifiedTLB = Param.Bool(True, "Is this a Unified TLB?")
     interrupts = VectorParam.BaseInterrupts([], "Interrupt Controller")
     isa = VectorParam.BaseISA([], "ISA instance")
     decoder = VectorParam.InstDecoder([], "Decoder instance")
