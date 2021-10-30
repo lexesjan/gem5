@@ -53,6 +53,13 @@ SimObject('SparcNativeTrace.py', tags='sparc isa')
 SimObject('SparcSeWorkload.py', tags='sparc isa')
 SimObject('SparcTLB.py', tags='sparc isa')
 
+SimObject('SparcCPU.py', tags='sparc isa')
+if env['TARGET_ISA'] == 'sparc':
+    SimObject('AtomicSimpleCPU.py', tags='sparc isa')
+    SimObject('TimingSimpleCPU.py', tags='sparc isa')
+    SimObject('NonCachingSimpleCPU.py', tags='sparc isa')
+    SimObject('O3CPU.py', tags='sparc isa')
+
 DebugFlag('Sparc', "Generic SPARC ISA stuff", tags='sparc isa')
 DebugFlag('RegisterWindows', "Register window manipulation", tags='sparc isa')
 

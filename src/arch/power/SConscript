@@ -53,6 +53,13 @@ SimObject('PowerMMU.py', tags='power isa')
 SimObject('PowerSeWorkload.py', tags='power isa')
 SimObject('PowerTLB.py', tags='power isa')
 
+SimObject('PowerCPU.py', tags='power isa')
+if env['TARGET_ISA'] == 'power':
+    SimObject('AtomicSimpleCPU.py', tags='power isa')
+    SimObject('TimingSimpleCPU.py', tags='power isa')
+    SimObject('NonCachingSimpleCPU.py', tags='power isa')
+    SimObject('O3CPU.py', tags='power isa')
+
 DebugFlag('Power', tags='power isa')
 
 ISADesc('isa/main.isa', tags='power isa')

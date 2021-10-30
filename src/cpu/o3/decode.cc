@@ -48,7 +48,7 @@
 #include "debug/Activity.hh"
 #include "debug/Decode.hh"
 #include "debug/O3PipeView.hh"
-#include "params/O3CPU.hh"
+#include "params/BaseO3CPU.hh"
 #include "sim/full_system.hh"
 
 // clang complains about std::set being overloaded with Packet::set if
@@ -61,7 +61,7 @@ namespace gem5
 namespace o3
 {
 
-Decode::Decode(CPU *_cpu, const O3CPUParams &params)
+Decode::Decode(CPU *_cpu, const BaseO3CPUParams &params)
     : cpu(_cpu),
       renameToDecodeDelay(params.renameToDecodeDelay),
       iewToDecodeDelay(params.iewToDecodeDelay),

@@ -40,31 +40,30 @@
 
 Import('*')
 
-if 'MinorCPU' in env['CPU_MODELS']:
-    SimObject('MinorCPU.py')
+SimObject('BaseMinorCPU.py')
 
-    Source('activity.cc')
-    Source('cpu.cc')
-    Source('decode.cc')
-    Source('dyn_inst.cc')
-    Source('execute.cc')
-    Source('fetch1.cc')
-    Source('fetch2.cc')
-    Source('func_unit.cc')
-    Source('lsq.cc')
-    Source('pipe_data.cc')
-    Source('pipeline.cc')
-    Source('scoreboard.cc')
-    Source('stats.cc')
+Source('activity.cc')
+Source('cpu.cc')
+Source('decode.cc')
+Source('dyn_inst.cc')
+Source('execute.cc')
+Source('fetch1.cc')
+Source('fetch2.cc')
+Source('func_unit.cc')
+Source('lsq.cc')
+Source('pipe_data.cc')
+Source('pipeline.cc')
+Source('scoreboard.cc')
+Source('stats.cc')
 
-    DebugFlag('MinorCPU', 'Minor CPU-level events')
-    DebugFlag('MinorExecute', 'Minor Execute stage')
-    DebugFlag('MinorInterrupt', 'Minor interrupt handling')
-    DebugFlag('MinorMem', 'Minor memory accesses')
-    DebugFlag('MinorScoreboard', 'Minor Execute register scoreboard')
-    DebugFlag('MinorTrace', 'MinorTrace cycle-by-cycle state trace')
-    DebugFlag('MinorTiming', 'Extra timing for instructions')
+DebugFlag('MinorCPU', 'Minor CPU-level events')
+DebugFlag('MinorExecute', 'Minor Execute stage')
+DebugFlag('MinorInterrupt', 'Minor interrupt handling')
+DebugFlag('MinorMem', 'Minor memory accesses')
+DebugFlag('MinorScoreboard', 'Minor Execute register scoreboard')
+DebugFlag('MinorTrace', 'MinorTrace cycle-by-cycle state trace')
+DebugFlag('MinorTiming', 'Extra timing for instructions')
 
-    CompoundFlag('Minor', [
-        'MinorCPU', 'MinorExecute', 'MinorInterrupt', 'MinorMem',
-        'MinorScoreboard'])
+CompoundFlag('Minor', [
+    'MinorCPU', 'MinorExecute', 'MinorInterrupt', 'MinorMem',
+    'MinorScoreboard'])
