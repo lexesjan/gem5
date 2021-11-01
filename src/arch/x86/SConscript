@@ -71,7 +71,7 @@ SimObject('X86NativeTrace.py', tags='x86 isa')
 SimObject('X86TLB.py', tags='x86 isa')
 
 SimObject('X86CPU.py', tags='x86 isa')
-if env['TARGET_ISA'] == 'x86':
+if env['USE_X86']:
     SimObject('AtomicSimpleCPU.py', tags='x86 isa')
     SimObject('TimingSimpleCPU.py', tags='x86 isa')
     SimObject('NonCachingSimpleCPU.py', tags='x86 isa')

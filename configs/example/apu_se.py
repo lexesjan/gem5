@@ -544,7 +544,7 @@ system.clk_domain = SrcClockDomain(clock =  args.sys_clock,
 
 if fast_forward:
     have_kvm_support = 'BaseKvmCPU' in globals()
-    if have_kvm_support and buildEnv['TARGET_ISA'] == "x86":
+    if have_kvm_support and buildEnv['USE_X86']:
         system.vm = KvmVM()
         for i in range(len(host_cpu.workload)):
             host_cpu.workload[i].useArchPT = True
@@ -580,7 +580,7 @@ for i in range(args.num_cpus):
     system.cpu[i].dcache_port = ruby_port.in_ports
 
     ruby_port.mem_request_port = system.piobus.cpu_side_ports
-    if buildEnv['TARGET_ISA'] == "x86":
+    if buildEnv['USE_X86']:
         system.cpu[i].interrupts[0].pio = system.piobus.mem_side_ports
         system.cpu[i].interrupts[0].int_requestor = \
             system.piobus.cpu_side_ports

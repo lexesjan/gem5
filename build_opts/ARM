@@ -1,2 +1,2 @@
-TARGET_ISA = 'arm'
+USE_ARM = True
 PROTOCOL = 'CHI'

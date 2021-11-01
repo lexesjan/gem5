@@ -54,7 +54,7 @@ SimObject('SparcSeWorkload.py', tags='sparc isa')
 SimObject('SparcTLB.py', tags='sparc isa')
 
 SimObject('SparcCPU.py', tags='sparc isa')
-if env['TARGET_ISA'] == 'sparc':
+if env['USE_SPARC']:
     SimObject('AtomicSimpleCPU.py', tags='sparc isa')
     SimObject('TimingSimpleCPU.py', tags='sparc isa')
     SimObject('NonCachingSimpleCPU.py', tags='sparc isa')

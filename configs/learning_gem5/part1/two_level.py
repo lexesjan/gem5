@@ -53,7 +53,18 @@ from caches import *
 from common import SimpleOpts
 
 # get ISA for the default binary to run. This is mostly for simple testing
-isa = str(m5.defines.buildEnv['TARGET_ISA']).lower()
+if m5.defines.buildEnv['USE_ARM']:
+    isa = 'arm'
+elif m5.defines.buildEnv['USE_MIPS']:
+    isa = 'mips'
+elif m5.defines.buildEnv['USE_POWER']:
+    isa = 'power'
+elif m5.defines.buildEnv['USE_RISCV']:
+    isa = 'riscv'
+elif m5.defines.buildEnv['USE_SPARC']:
+    isa = 'sparc'
+elif m5.defines.buildEnv['USE_X86']:
+    isa = 'x86'
 
 # Default to running 'hello', use the compiled ISA to find the binary
 # grab the specific path to the binary
@@ -112,7 +123,7 @@ system.cpu.createInterruptController()
 
 # For x86 only, make sure the interrupts are connected to the memory
 # Note: these are directly connected to the memory bus and are not cached
-if m5.defines.buildEnv['TARGET_ISA'] == "x86":
+if m5.defines.buildEnv['USE_X86']:
     system.cpu.interrupts[0].pio = system.membus.mem_side_ports
     system.cpu.interrupts[0].int_requestor = system.membus.cpu_side_ports
     system.cpu.interrupts[0].int_responder = system.membus.mem_side_ports

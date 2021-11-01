@@ -1,2 +1,2 @@
-TARGET_ISA = 'power'
+USE_POWER = True
 PROTOCOL = 'MI_example'

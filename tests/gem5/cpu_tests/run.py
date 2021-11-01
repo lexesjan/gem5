@@ -92,7 +92,7 @@ class L2Cache(Cache):
 class MySimpleMemory(SimpleMemory):
     latency = '1ns'
 
-if buildEnv['TARGET_ISA'] == 'x86':
+if buildEnv['USE_X86']:
   valid_cpu = {'AtomicSimpleCPU': AtomicSimpleCPU,
                'TimingSimpleCPU': TimingSimpleCPU,
                'DerivO3CPU': DerivO3CPU
@@ -150,7 +150,7 @@ else:
     system.l2cache.connectMemSideBus(system.membus)
 
 system.cpu.createInterruptController()
-if m5.defines.buildEnv['TARGET_ISA'] == "x86":
+if m5.defines.buildEnv['USE_X86']:
     system.cpu.interrupts[0].pio = system.membus.master
     system.cpu.interrupts[0].int_master = system.membus.slave
     system.cpu.interrupts[0].int_slave = system.membus.master
