@@ -23,6 +23,17 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from m5.objects.X86CPU import X86AtomicSimpleCPU
+import m5.defines
 
-AtomicSimpleCPU = X86AtomicSimpleCPU
+arch_vars = [
+    'USE_ARM', 'USE_MIPS', 'USE_POWER', 'USE_RISCV', 'USE_SPARC', 'USE_X86'
+]
+
+enabled = list(filter(lambda var: m5.defines.buildEnv[var], arch_vars))
+
+if len(enabled) == 1:
+    arch = enabled[0]
+    if arch == 'USE_ARM':
+        from m5.objects.ArmCPU import ArmMinorCPU as MinorCPU
+    if arch == 'USE_RISCV':
+        from m5.objects.RiscvCPU import RiscvMinorCPU as MinorCPU

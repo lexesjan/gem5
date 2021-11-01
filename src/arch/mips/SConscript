@@ -51,11 +51,6 @@ SimObject('MipsSeWorkload.py', tags='mips isa')
 SimObject('MipsTLB.py', tags='mips isa')
 
 SimObject('MipsCPU.py', tags='mips isa')
-if env['USE_MIPS']:
-    SimObject('AtomicSimpleCPU.py', tags='mips isa')
-    SimObject('TimingSimpleCPU.py', tags='mips isa')
-    SimObject('NonCachingSimpleCPU.py', tags='mips isa')
-    SimObject('O3CPU.py', tags='mips isa')
 
 DebugFlag('MipsPRA', tags='mips isa')
 

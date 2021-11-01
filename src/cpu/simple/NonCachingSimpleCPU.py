@@ -23,6 +23,31 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from m5.objects.RiscvCPU import RiscvTimingSimpleCPU
+import m5.defines
 
-TimingSimpleCPU = RiscvTimingSimpleCPU
+arch_vars = [
+    'USE_ARM', 'USE_MIPS', 'USE_POWER', 'USE_RISCV', 'USE_SPARC', 'USE_X86'
+]
+
+enabled = list(filter(lambda var: m5.defines.buildEnv[var], arch_vars))
+
+if len(enabled) == 1:
+    arch = enabled[0]
+    if arch == 'USE_ARM':
+        from m5.objects.ArmCPU import ArmNonCachingSimpleCPU as \
+                NonCachingSimpleCPU
+    elif arch == 'USE_MIPS':
+        from m5.objects.MipsCPU import MipsNonCachingSimpleCPU as \
+                NonCachingSimpleCPU
+    elif arch == 'USE_POWER':
+        from m5.objects.PowerCPU import PowerNonCachingSimpleCPU as \
+                NonCachingSimpleCPU
+    elif arch == 'USE_RISCV':
+        from m5.objects.RiscvCPU import RiscvNonCachingSimpleCPU as \
+                NonCachingSimpleCPU
+    elif arch == 'USE_SPARC':
+        from m5.objects.SparcCPU import SparcNonCachingSimpleCPU as \
+                NonCachingSimpleCPU
+    elif arch == 'USE_X86':
+        from m5.objects.X86CPU import X86NonCachingSimpleCPU as \
+                NonCachingSimpleCPU

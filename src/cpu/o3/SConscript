@@ -74,3 +74,7 @@ CompoundFlag('O3CPUAll', [ 'Fetch', 'Decode', 'Rename', 'IEW', 'Commit',
 
 SimObject('BaseO3Checker.py')
 Source('checker.cc')
+
+# For backwards compatibility
+SimObject('O3CPU.py')
+SimObject('O3Checker.py')

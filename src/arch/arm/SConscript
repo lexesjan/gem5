@@ -108,13 +108,6 @@ SimObject('ArmTLB.py', tags='arm isa')
 SimObject('ArmPMU.py', tags='arm isa')
 
 SimObject('ArmCPU.py', tags='arm isa')
-if env['USE_ARM']:
-    SimObject('AtomicSimpleCPU.py', tags='arm isa')
-    SimObject('TimingSimpleCPU.py', tags='arm isa')
-    SimObject('NonCachingSimpleCPU.py', tags='arm isa')
-    SimObject('O3CPU.py', tags='arm isa')
-    SimObject('O3Checker.py', tags='arm isa')
-    SimObject('MinorCPU.py', tags='arm isa')
 
 DebugFlag('Arm', tags='arm isa')
 DebugFlag('ArmTme', 'Transactional Memory Extension', tags='arm isa')

@@ -23,6 +23,15 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from m5.objects.ArmCPU import ArmO3Checker
+import m5.defines
 
-O3Checker = ArmO3Checker
+arch_vars = [
+    'USE_ARM', 'USE_MIPS', 'USE_POWER', 'USE_RISCV', 'USE_SPARC', 'USE_X86'
+]
+
+enabled = list(filter(lambda var: m5.defines.buildEnv[var], arch_vars))
+
+if len(enabled) == 1:
+    arch = enabled[0]
+    if arch == 'USE_ARM':
+        from m5.objects.ArmCPU import ArmO3Checker as O3Checker

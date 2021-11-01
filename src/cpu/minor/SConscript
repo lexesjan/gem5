@@ -67,3 +67,6 @@ DebugFlag('MinorTiming', 'Extra timing for instructions')
 CompoundFlag('Minor', [
     'MinorCPU', 'MinorExecute', 'MinorInterrupt', 'MinorMem',
     'MinorScoreboard'])
+
+# For backwards compatibility
+SimObject('MinorCPU.py')
