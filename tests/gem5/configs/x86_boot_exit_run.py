@@ -33,7 +33,7 @@ from m5.objects import Root
 
 from gem5.runtime import (
     get_runtime_coherence_protocol,
-    get_runtime_isa,
+    get_runtime_isas,
 )
 from gem5.utils.requires import requires
 from gem5.components.boards.x86_board import X86Board
@@ -204,7 +204,7 @@ motherboard.set_kernel_disk_workload(
 
 # Begin running of the simulation. This will exit once the Linux system boot
 # is complete.
-print("Running with ISA: " + get_runtime_isa().name)
+print("Running with ISA: " + get_runtime_isas()[0].name)
 print("Running with protocol: " + get_runtime_coherence_protocol().name)
 print()
 

@@ -24,7 +24,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-from ..runtime import get_runtime_coherence_protocol, get_runtime_isa
+from ..runtime import get_runtime_coherence_protocol, get_runtime_isas
 from ..isas import ISA
 from ..coherence_protocol import CoherenceProtocol
 from typing import Optional
@@ -68,11 +68,11 @@ def requires(
         protocol do not match that of the current gem5 binary.
     """
 
-    runtime_isa = get_runtime_isa()
+    runtime_isas = get_runtime_isas()
     runtime_coherence_protocol = get_runtime_coherence_protocol()
     kvm_available = os.access("/dev/kvm", mode=os.R_OK | os.W_OK)
 
-    if isa_required != None and isa_required != runtime_isa:
+    if isa_required != None and not isa_required in runtime_isas:
         raise Exception(
             _get_exception_str(
                 msg="The current ISA is '{}'. Required: '{}'".format(
