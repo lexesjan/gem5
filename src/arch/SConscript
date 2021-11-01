@@ -55,21 +55,6 @@ Import('*')
 #
 #################################################################
 
-if env['USE_ARM']:
-    env.TagImplies('arm isa', 'gem5 lib')
-elif env['USE_MIPS']:
-    env.TagImplies('mips isa', 'gem5 lib')
-elif env['USE_POWER']:
-    env.TagImplies('power isa', 'gem5 lib')
-elif env['USE_RISCV']:
-    env.TagImplies('riscv isa', 'gem5 lib')
-elif env['USE_SPARC']:
-    env.TagImplies('sparc isa', 'gem5 lib')
-elif env['USE_X86']:
-    env.TagImplies('x86 isa', 'gem5 lib')
-elif env['USE_NULL']:
-    env.TagImplies('null isa', 'gem5 lib')
-
 amdgpu_isa = ['gcn3', 'vega']
 
 if env['BUILD_GPU']:
