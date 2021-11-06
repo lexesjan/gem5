@@ -1,0 +1,7 @@
+USE_ARM = True
+USE_MIPS = True
+USE_POWER = True
+USE_RISCV = True
+USE_SPARC = True
+USE_X86 = True
+PROTOCOL = 'MI_example'
