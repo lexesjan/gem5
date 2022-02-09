@@ -1,4 +1,17 @@
-# Copyright 2019 Google, Inc.
+# -*- mode:python -*-
+
+# Copyright (c) 2022  Institute of Computing Technology, Chinese
+#                     Academy of Sciences
+# All rights reserved.
+#
+# The license below extends only to copyright in the software and shall
+# not be construed as granting a license to any other intellectual
+# property including but not limited to intellectual property relating
+# to a hardware implementation of the functionality of the software
+# licensed hereunder.  You may use the software subject to the license
+# terms below provided that you ensure that this notice is replicated
+# unmodified and in its entirety in all distributions of the software,
+# modified or unmodified, in source code or in binary form.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -23,23 +36,15 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-Import('*')
+from m5.params import *
+from m5.proxy import *
+from m5.objects.VirtIO import VirtIODeviceBase
 
-if not env['USE_ARM_FASTMODEL']:
-    Return()
+class VirtIORng(VirtIODeviceBase):
+    type = 'VirtIORng'
+    cxx_header = 'dev/virtio/rng.hh'
+    cxx_class = 'gem5::VirtIORng'
 
-protocol_dir = Dir('..').Dir('protocol')
+    qSize = Param.Unsigned(16, "Request queue size")
 
-for name in ('x1', 'x2', 'x3', 'x4'):
-    ArmFastModelComponent(Dir(name).File(name + '.sgproj'),
-                          Dir(name).File(name + '.lisa'),
-                          protocol_dir.File(
-                              'ExportedClockRateControlProtocol.lisa')
-                          ).prepare_env(env)
-
-SimObject('FastModelCortexA76.py', sim_objects=[
-    'FastModelCortexA76', 'FastModelCortexA76Cluster'] +
-    [f'FastModelScxEvsCortexA76x{num}' for num in (1, 2, 3, 4)])
-Source('cortex_a76.cc')
-Source('evs.cc')
-Source('thread_context.cc')
+    entropy_source = Param.String("/dev/random", "The source of entropy")
