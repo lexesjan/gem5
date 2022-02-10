@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 
+#include "arch/arm/remote_gdb.hh"
 #include "base/loader/symtab.hh"
 #include "base/types.hh"
 #include "params/ARMROMWorkload.hh"
@@ -15,51 +16,55 @@ class System;
 
 namespace ARMCortexM4 {
 
-class ARMROMWorkload : public Workload
+class ARMROMWorkload : public gem5::StubWorkload
 {
   public:
-    using Params = ARMROMWorkloadParams;
+    using Params = gem5::ARMROMWorkloadParams;
 
   protected:
     const Params &_params;
 
-    Loader::MemoryImage image;
-    Addr entry;
+    gem5::loader::MemoryImage image;
+    gem5::Addr entry;
 
-    Addr _start, _end;
-    Loader::SymbolTable _symtab;
+    gem5::Addr _start, _end;
+    gem5::loader::SymbolTable _symtab;
 
   public:
     const Params &params() const { return _params; }
 
-    Addr start() const { return _start; }
-    Addr end() const { return _end; }
+    gem5::Addr start() const { return _start; }
+    gem5::Addr end() const { return _end; }
 
     ARMROMWorkload(const Params &p);
 
-    Addr getEntry() const override { return entry; }
-    Loader::Arch
+    gem5::Addr getEntry() const override { return entry; }
+    gem5::loader::Arch
     getArch() const override
     {
-        return Loader::Thumb;
+        return gem5::loader::Thumb;
     }
 
-    const Loader::SymbolTable &
-    symtab(ThreadContext *tc) override
+    void
+    setSystem(gem5::System *sys) override
+    {
+        gem5::Workload::setSystem(sys);
+        gdb = gem5::BaseRemoteGDB::build<gem5::ArmISA::RemoteGDB>(system);
+    }
+
+    const gem5::loader::SymbolTable &
+    symtab(gem5::ThreadContext *tc) override
     {
         return _symtab;
     }
 
     bool
-    insertSymbol(const Loader::Symbol &symbol) override
+    insertSymbol(const gem5::loader::Symbol &symbol) override
     {
         return _symtab.insert(symbol);
     }
 
     void initState() override;
-
-    void serialize(CheckpointOut &cp) const override;
-    void unserialize(CheckpointIn &cp) override;
 };
 
 } // namespace ARMCortexM4
