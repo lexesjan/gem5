@@ -50,8 +50,7 @@ import re
 import sys
 
 import SCons
-
-from gem5_scons import Transform, warning, error, ToValue, FromValue
+from gem5_scons import FromValue, ToValue, Transform, error, warning
 from gem5_scons.sources import *
 
 Export(SourceFilter.factories)
@@ -67,6 +66,7 @@ Export('env')
 build_env = [(opt, env[opt]) for opt in export_vars]
 
 from code_formatter import code_formatter
+
 
 def GdbXml(xml_id, symbol, tags=None, add_tags=None):
     cc, hh = env.Blob(symbol, xml_id)
@@ -595,8 +595,8 @@ class M5MetaPathFinder(importlib.abc.MetaPathFinder):
 
         return spec
 
-import m5.SimObject
 import m5.params
+import m5.SimObject
 
 m5.SimObject.clear()
 m5.params.clear()
@@ -829,7 +829,7 @@ envs = {
 
 envs['debug'].Append(CPPDEFINES=['DEBUG', 'TRACING_ON=1'])
 envs['opt'].Append(CCFLAGS=['-g'], CPPDEFINES=['TRACING_ON=1'])
-envs['fast'].Append(CPPDEFINES=['NDEBUG', 'TRACING_ON=0'])
+envs['fast'].Append(CPPDEFINES=['TRACING_ON=1'])
 
 # For Link Time Optimization, the optimisation flags used to compile
 # individual files are decoupled from those used at link time
