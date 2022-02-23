@@ -1,5 +1,7 @@
 Import('*')
 
+SimObject('ARMDWT.py', sim_objects=['ARMDWT'])
 SimObject('ARMROMWorkload.py', sim_objects=['ARMROMWorkload'])
 
+Source('dwt.cc')
 Source('workload.cc')
