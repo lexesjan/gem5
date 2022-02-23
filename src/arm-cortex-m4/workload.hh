@@ -1,7 +1,7 @@
 // Adapted from https://github.com/devplayer0/gem5/blob/perfgrade/src/perfgrade/workload.hh
 
-#ifndef __ARMROM_WORKLOAD_HH__
-#define __ARMROM_WORKLOAD_HH__
+#ifndef __ARM_CORTEX_M4_ARMROM_WORKLOAD_HH__
+#define __ARM_CORTEX_M4_ARMROM_WORKLOAD_HH__
 
 #include <string>
 #include <vector>
@@ -69,4 +69,4 @@ class ARMROMWorkload : public gem5::StubWorkload
 
 } // namespace ARMCortexM4
 
-#endif // __ARMROM_WORKLOAD_HH__
+#endif // __ARM_CORTEX_M4_ARMROM_WORKLOAD_HH__
