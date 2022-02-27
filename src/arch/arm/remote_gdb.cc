@@ -364,8 +364,12 @@ RemoteGDB::gdbRegs()
 bool
 RemoteGDB::checkBpLen(size_t len)
 {
+    // Remove the low bit that thumb symbols have set
+    // but that aren't actually odd aligned
+    size_t trimmed_len = len & ~1;
+
     // 2 for Thumb ISA, 4 for ARM ISA.
-    return len >= 2 && len <= 4;
+    return trimmed_len == 2 || trimmed_len == 4;
 }
 
 } // namespace gem5
