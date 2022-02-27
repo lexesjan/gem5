@@ -365,7 +365,7 @@ bool
 RemoteGDB::checkBpLen(size_t len)
 {
     // 2 for Thumb ISA, 4 for ARM ISA.
-    return len == 2 || len == 4;
+    return len >= 2 && len <= 4;
 }
 
 } // namespace gem5
