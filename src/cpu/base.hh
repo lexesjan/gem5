@@ -649,6 +649,9 @@ class BaseCPU : public ClockedObject
     EventFunctionWrapper enterPwrGatingEvent;
 
   public:
+    /** DWT used to profile the system */
+    ArmCortexM4::DWT *dwt;
+
     /**
      * Helper method to update DWT counters for a committed
      * instruction.
@@ -656,10 +659,6 @@ class BaseCPU : public ClockedObject
      * @param inst Instruction that just committed
      */
     virtual void dwtInstCommit(const StaticInstPtr &inst);
-
-  protected:
-    /** DWT used to profile the system */
-    ArmCortexM4::DWT *dwt;
 };
 
 } // namespace gem5
