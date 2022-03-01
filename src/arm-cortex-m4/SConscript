@@ -5,3 +5,5 @@ SimObject('ARMROMWorkload.py', sim_objects=['ARMROMWorkload'])
 
 Source('dwt.cc')
 Source('workload.cc')
+
+DebugFlag('ARMCortexM4DWT')
