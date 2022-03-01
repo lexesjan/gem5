@@ -48,6 +48,7 @@
 #include <string>
 
 #include "arch/generic/tlb.hh"
+#include "arm-cortex-m4/dwt.hh"
 #include "base/cprintf.hh"
 #include "base/loader/symtab.hh"
 #include "base/logging.hh"
@@ -778,6 +779,15 @@ BaseCPU::dwtInstCommit(const StaticInstPtr &inst)
 {
     if (!dwt) {
         return;
+    }
+
+    if (!inst->isMicroop() || inst->isLastMicroop()) {
+        dwt->incrementCounterValue(ArmCortexM4::DWT::DWT_CYCCNT, 1);
+    }
+
+    if (inst->isLoad()) {
+        dwt->incrementCounterValue(ArmCortexM4::DWT::DWT_CYCCNT, 1);
+        dwt->incrementCounterValue(ArmCortexM4::DWT::DWT_LSUCNT, 1);
     }
 }
 
