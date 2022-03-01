@@ -9,17 +9,17 @@
 #include "arch/arm/remote_gdb.hh"
 #include "base/loader/symtab.hh"
 #include "base/types.hh"
-#include "params/ARMROMWorkload.hh"
+#include "params/ArmROMWorkload.hh"
 #include "sim/workload.hh"
 
 class System;
 
-namespace ARMCortexM4 {
+namespace ArmCortexM4 {
 
-class ARMROMWorkload : public gem5::StubWorkload
+class ArmROMWorkload : public gem5::StubWorkload
 {
   public:
-    using Params = gem5::ARMROMWorkloadParams;
+    using Params = gem5::ArmROMWorkloadParams;
 
   protected:
     const Params &_params;
@@ -36,7 +36,7 @@ class ARMROMWorkload : public gem5::StubWorkload
     gem5::Addr start() const { return _start; }
     gem5::Addr end() const { return _end; }
 
-    ARMROMWorkload(const Params &p);
+    ArmROMWorkload(const Params &p);
 
     gem5::Addr getEntry() const override { return entry; }
     gem5::loader::Arch
@@ -67,6 +67,6 @@ class ARMROMWorkload : public gem5::StubWorkload
     void initState() override;
 };
 
-} // namespace ARMCortexM4
+} // namespace ArmCortexM4
 
 #endif // __ARM_CORTEX_M4_ARMROM_WORKLOAD_HH__

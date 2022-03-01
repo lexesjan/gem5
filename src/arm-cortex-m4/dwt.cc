@@ -1,12 +1,13 @@
 #include "arm-cortex-m4/dwt.hh"
 
 #include "base/trace.hh"
-#include "debug/ARMCortexM4DWT.hh"
+#include "debug/ArmCortexM4DWT.hh"
 #include "mem/packet_access.hh"
 
-namespace ARMCortexM4 {
+namespace ArmCortexM4
+{
 
-DWT::DWT(const gem5::ARMDWTParams &params)
+DWT::DWT(const gem5::ArmDWTParams &params)
     : gem5::BasicPioDevice(params, 0x2000)
 {
 }
@@ -21,7 +22,7 @@ DWT::read(gem5::PacketPtr pkt)
 
     gem5::Addr daddr = pkt->getAddr() - pioAddr;
 
-    DPRINTF(ARMCortexM4DWT, "Reading from DWT at offset: %#x\n", daddr);
+    DPRINTF(ArmCortexM4DWT, "Reading from DWT at offset: %#x\n", daddr);
     pkt->setLE<uint32_t>(0xFAFAFAFA);
 
     pkt->makeAtomicResponse();
@@ -37,10 +38,10 @@ DWT::write(gem5::PacketPtr pkt)
 
     gem5::Addr daddr = pkt->getAddr() - pioAddr;
 
-    DPRINTF(ARMCortexM4DWT, "Writing to DWT at offset: %#x\n", daddr);
+    DPRINTF(ArmCortexM4DWT, "Writing to DWT at offset: %#x\n", daddr);
     pkt->makeAtomicResponse();
 
     return pioDelay;
 }
 
-}  // namespace ARMCortexM4
+}  // namespace ArmCortexM4

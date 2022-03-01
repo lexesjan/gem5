@@ -1,9 +1,9 @@
 Import('*')
 
-SimObject('ARMDWT.py', sim_objects=['ARMDWT'])
-SimObject('ARMROMWorkload.py', sim_objects=['ARMROMWorkload'])
+SimObject('ArmDWT.py', sim_objects=['ArmDWT'])
+SimObject('ArmROMWorkload.py', sim_objects=['ArmROMWorkload'])
 
 Source('dwt.cc')
 Source('workload.cc')
 
-DebugFlag('ARMCortexM4DWT')
+DebugFlag('ArmCortexM4DWT')

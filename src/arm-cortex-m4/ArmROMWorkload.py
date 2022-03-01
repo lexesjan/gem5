@@ -3,9 +3,9 @@
 from m5.params import *
 from m5.objects.Workload import StubWorkload
 
-class ARMROMWorkload(StubWorkload):
-    type = 'ARMROMWorkload'
-    cxx_class = 'ARMCortexM4::ARMROMWorkload'
+class ArmROMWorkload(StubWorkload):
+    type = 'ArmROMWorkload'
+    cxx_class = 'ArmCortexM4::ArmROMWorkload'
     cxx_header = 'arm-cortex-m4/workload.hh'
 
     rom_file = Param.String('', 'File that contains the ROM')

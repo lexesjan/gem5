@@ -5,13 +5,13 @@
 #include "arch/arm/faults.hh"
 #include "base/loader/raw_image.hh"
 #include "debug/Loader.hh"
-#include "params/ARMROMWorkload.hh"
+#include "params/ArmROMWorkload.hh"
 #include "sim/byteswap.hh"
 #include "sim/system.hh"
 
-namespace ARMCortexM4 {
+namespace ArmCortexM4 {
 
-ARMROMWorkload::ARMROMWorkload(const Params &p) : StubWorkload(p), _params(p)
+ArmROMWorkload::ArmROMWorkload(const Params &p) : StubWorkload(p), _params(p)
 {
     if (params().rom_file == "") {
         fatal("No ROM file set for full system simulation");
@@ -37,7 +37,7 @@ ARMROMWorkload::ARMROMWorkload(const Params &p) : StubWorkload(p), _params(p)
 }
 
 void
-ARMCortexM4::ARMROMWorkload::initState()
+ArmCortexM4::ArmROMWorkload::initState()
 {
     auto &phys_mem = system->physProxy;
 
@@ -71,4 +71,4 @@ ARMCortexM4::ARMROMWorkload::initState()
     t0->pcState(pc);
 }
 
-} // namespace ARMCortexM4
+} // namespace ArmCortexM4
