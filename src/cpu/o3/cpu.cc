@@ -1351,6 +1351,7 @@ CPU::instDone(ThreadID tid, const DynInstPtr &inst)
     cpuStats.committedOps[tid]++;
 
     probeInstCommit(inst->staticInst, inst->pcState().instAddr());
+    dwtInstCommit(inst->staticInst);
 }
 
 void

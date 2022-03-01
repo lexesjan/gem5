@@ -52,6 +52,7 @@
 #error Including BaseCPU in a system without CPU support
 #else
 #include "arch/generic/interrupts.hh"
+#include "arm-cortex-m4/dwt.hh"
 #include "base/statistics.hh"
 #include "debug/Mwait.hh"
 #include "mem/htm.hh"
@@ -646,6 +647,19 @@ class BaseCPU : public ClockedObject
     const Cycles pwrGatingLatency;
     const bool powerGatingOnIdle;
     EventFunctionWrapper enterPwrGatingEvent;
+
+  public:
+    /**
+     * Helper method to update DWT counters for a committed
+     * instruction.
+     *
+     * @param inst Instruction that just committed
+     */
+    virtual void dwtInstCommit(const StaticInstPtr &inst);
+
+  protected:
+    /** DWT used to profile the system */
+    ArmCortexM4::DWT *dwt;
 };
 
 } // namespace gem5
