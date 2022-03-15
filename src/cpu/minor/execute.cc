@@ -298,7 +298,7 @@ Execute::tryToBranch(MinorDynInstPtr inst, Fault fault, BranchData &branch)
 
     // Only increment DWT if a branch occurred
     if (reason != BranchData:: NoBranch) {
-        cpu.dwt->incrementCounterValue(ArmCortexM4::DWT::DWT_CYCCNT, 1);
+        cpu.dwt->incrementCounterValue(ArmPerformance::DWT::DWT_CYCCNT, 1);
     }
 
     updateBranchData(inst->id.threadId, reason, inst, *target, branch);

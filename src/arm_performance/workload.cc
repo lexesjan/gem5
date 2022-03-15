@@ -1,6 +1,6 @@
 // Adapted from https://github.com/devplayer0/gem5/blob/perfgrade/src/perfgrade/workload.cc
 
-#include "arm-cortex-m4/workload.hh"
+#include "arm_performance/workload.hh"
 
 #include "arch/arm/faults.hh"
 #include "base/loader/raw_image.hh"
@@ -9,7 +9,8 @@
 #include "sim/byteswap.hh"
 #include "sim/system.hh"
 
-namespace ArmCortexM4 {
+namespace ArmPerformance
+{
 
 ArmROMWorkload::ArmROMWorkload(const Params &p) : StubWorkload(p), _params(p)
 {
@@ -37,7 +38,7 @@ ArmROMWorkload::ArmROMWorkload(const Params &p) : StubWorkload(p), _params(p)
 }
 
 void
-ArmCortexM4::ArmROMWorkload::initState()
+ArmROMWorkload::initState()
 {
     auto &phys_mem = system->physProxy;
 
@@ -71,4 +72,4 @@ ArmCortexM4::ArmROMWorkload::initState()
     t0->pcState(pc);
 }
 
-} // namespace ArmCortexM4
+} // namespace ArmPerformance

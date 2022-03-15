@@ -6,4 +6,4 @@ SimObject('ArmROMWorkload.py', sim_objects=['ArmROMWorkload'])
 Source('dwt.cc')
 Source('workload.cc')
 
-DebugFlag('ArmCortexM4DWT')
+DebugFlag('ArmDWT')

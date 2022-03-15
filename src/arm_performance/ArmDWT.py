@@ -3,5 +3,5 @@ from m5.objects.Device import BasicPioDevice
 
 class ArmDWT(BasicPioDevice):
     type = 'ArmDWT'
-    cxx_class = 'ArmCortexM4::DWT'
-    cxx_header = 'arm-cortex-m4/dwt.hh'
+    cxx_class = 'ArmPerformance::DWT'
+    cxx_header = 'arm_performance/dwt.hh'

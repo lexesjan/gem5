@@ -335,9 +335,9 @@ website:
     - Bobby Bruce <bbruce@ucdavis.edu>
     - Hoa Nguyen <hoanguyen@ucdavis.edu>
 
-arm-cortex-m4:
+arm-performance:
   desc: >-
-    ARM Cortex M4 processor with performance counters
+    ARM Cortex M4 performance counters
   status: maintained
   maintainers:
     - Lexes Jan Mantiquilla <mantiqul@tcd.ie>

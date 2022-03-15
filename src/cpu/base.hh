@@ -52,7 +52,7 @@
 #error Including BaseCPU in a system without CPU support
 #else
 #include "arch/generic/interrupts.hh"
-#include "arm-cortex-m4/dwt.hh"
+#include "arm_performance/dwt.hh"
 #include "base/statistics.hh"
 #include "debug/Mwait.hh"
 #include "mem/htm.hh"
@@ -650,7 +650,7 @@ class BaseCPU : public ClockedObject
 
   public:
     /** DWT used to profile the system */
-    ArmCortexM4::DWT *dwt;
+    ArmPerformance::DWT *dwt;
 
     /**
      * Helper method to update DWT counters for a committed

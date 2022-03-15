@@ -1,10 +1,10 @@
-#include "arm-cortex-m4/dwt.hh"
+#include "arm_performance/dwt.hh"
 
 #include "base/trace.hh"
-#include "debug/ArmCortexM4DWT.hh"
+#include "debug/ArmDWT.hh"
 #include "mem/packet_access.hh"
 
-namespace ArmCortexM4
+namespace ArmPerformance
 {
 
 DWT::DWT(const gem5::ArmDWTParams &params)
@@ -21,7 +21,7 @@ DWT::incrementCounterValue(uint32_t registerAddr, uint32_t value)
 {
     assert(isValidCounterRegisterAddr(registerAddr));
 
-    DPRINTF(ArmCortexM4DWT, "Incrementing counter %#x by value %d\n",
+    DPRINTF(ArmDWT, "Incrementing counter %#x by value %d\n",
         registerAddr, value);
     uint32_t id = DWT::registerAddrToId(registerAddr);
     counters[id] += value;
@@ -35,7 +35,7 @@ DWT::read(gem5::PacketPtr pkt)
 
     gem5::Addr registerAddr = pkt->getAddr() - pioAddr;
 
-    DPRINTF(ArmCortexM4DWT, "Reading from DWT at offset: %#x\n", registerAddr);
+    DPRINTF(ArmDWT, "Reading from DWT at offset: %#x\n", registerAddr);
     switch(registerAddr) {
         case DWT_CTRL: {
             pkt->setLE<uint32_t>(control);
@@ -70,7 +70,7 @@ DWT::write(gem5::PacketPtr pkt)
 
     gem5::Addr registerAddr = pkt->getAddr() - pioAddr;
 
-    DPRINTF(ArmCortexM4DWT, "Writing to DWT at offset: %#x\n", registerAddr);
+    DPRINTF(ArmDWT, "Writing to DWT at offset: %#x\n", registerAddr);
     switch(registerAddr) {
         case DWT_CYCCNT ... DWT_LSUCNT: {
             uint32_t id = DWT::registerAddrToId(registerAddr);
@@ -95,4 +95,4 @@ DWT::write(gem5::PacketPtr pkt)
     return pioDelay;
 }
 
-}  // namespace ArmCortexM4
+}  // namespace ArmPerformance

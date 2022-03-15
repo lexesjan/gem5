@@ -1,5 +1,5 @@
-#ifndef __ARM_CORTEX_M4_DWT_HH__
-#define __ARM_CORTEX_M4_DWT_HH__
+#ifndef __ARM_PERFORMANCE_DWT_HH__
+#define __ARM_PERFORMANCE_DWT_HH__
 
 #include <vector>
 
@@ -7,7 +7,7 @@
 #include "dev/io_device.hh"
 #include "params/ArmDWT.hh"
 
-namespace ArmCortexM4
+namespace ArmPerformance
 {
 
 class DWT: public gem5::BasicPioDevice
@@ -130,6 +130,6 @@ class DWT: public gem5::BasicPioDevice
     gem5::Tick write(gem5::PacketPtr pkt) override;
 };
 
-} // namespace ArmCortexM4
+} // namespace ArmPerformance
 
-#endif // __ARM_CORTEX_M4_DWT_HH__
+#endif // __ARM_PERFORMANCE_DWT_HH__
