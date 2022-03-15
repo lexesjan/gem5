@@ -78,10 +78,10 @@ class DWT: public gem5::BasicPioDevice
     /**
      * Increments a counter by the value
      *
-     * @param offsetAddr ID of the counter.
+     * @param register_addr ID of the counter.
      * @param value Value to increment by.
      */
-    void incrementCounterValue(uint32_t offsetAddr, uint32_t value);
+    void incrementCounterValue(uint32_t register_addr, uint32_t value);
 
   private:
     /** Control register */
@@ -93,22 +93,22 @@ class DWT: public gem5::BasicPioDevice
     /**
      * Checks if the counter register address is valid
      *
-     * @param registerAddr Register address to check.
+     * @param register_addr Register address to check.
      */
-    bool isValidCounterRegisterAddr(uint32_t registerAddr)
+    bool isValidCounterRegisterAddr(uint32_t register_addr)
     {
-        return registerAddr % 4 == 0 && registerAddr >= DWT_CYCCNT &&
-               registerAddr <= DWT_FOLDCNT;
+        return register_addr % 4 == 0 && register_addr >= DWT_CYCCNT &&
+               register_addr <= DWT_FOLDCNT;
     }
 
     /**
      * Converts a register address to a counter ID
      *
-     * @param registerAddr Offset address to convert.
+     * @param register_addr Offset address to convert.
      */
-    uint32_t registerAddrToId(uint32_t registerAddr)
+    uint32_t registerAddrToId(uint32_t register_addr)
     {
-      return registerAddr / static_cast<uint32_t>(DWT_NCNTRS);
+      return register_addr / static_cast<uint32_t>(DWT_NCNTRS);
     }
 
   // BasicPioDevice

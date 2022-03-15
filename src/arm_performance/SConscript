@@ -1,9 +1,12 @@
 Import('*')
 
 SimObject('ArmDWT.py', sim_objects=['ArmDWT'])
+SimObject('ArmInstCounter.py', sim_objects=['ArmInstCounter'])
 SimObject('ArmROMWorkload.py', sim_objects=['ArmROMWorkload'])
 
 Source('dwt.cc')
+Source('inst_counter.cc')
 Source('workload.cc')
 
 DebugFlag('ArmDWT')
+DebugFlag('ArmInstCounter')

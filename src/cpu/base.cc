@@ -141,7 +141,7 @@ BaseCPU::BaseCPU(const Params &p, bool is_checker)
       pwrGatingLatency(p.pwr_gating_latency),
       powerGatingOnIdle(p.power_gating_on_idle),
       enterPwrGatingEvent([this]{ enterPwrGating(); }, name()),
-      dwt(p.dwt)
+      _dwt(p.dwt)
 {
     // if Python did not provide a valid ID, do it here
     if (_cpuId == -1 ) {
@@ -777,17 +777,17 @@ BaseCPU::GlobalStats::GlobalStats(statistics::Group *parent)
 void
 BaseCPU::dwtInstCommit(const StaticInstPtr &inst)
 {
-    if (!dwt) {
+    if (!_dwt) {
         return;
     }
 
     if (!inst->isMicroop() || inst->isLastMicroop()) {
-        dwt->incrementCounterValue(ArmPerformance::DWT::DWT_CYCCNT, 1);
+        _dwt->incrementCounterValue(ArmPerformance::DWT::DWT_CYCCNT, 1);
     }
 
     if (inst->isLoad()) {
-        dwt->incrementCounterValue(ArmPerformance::DWT::DWT_CYCCNT, 1);
-        dwt->incrementCounterValue(ArmPerformance::DWT::DWT_LSUCNT, 1);
+        _dwt->incrementCounterValue(ArmPerformance::DWT::DWT_CYCCNT, 1);
+        _dwt->incrementCounterValue(ArmPerformance::DWT::DWT_LSUCNT, 1);
     }
 }
 

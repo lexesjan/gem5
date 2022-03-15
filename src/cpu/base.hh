@@ -648,16 +648,19 @@ class BaseCPU : public ClockedObject
     const bool powerGatingOnIdle;
     EventFunctionWrapper enterPwrGatingEvent;
 
-  public:
+  private:
     /** DWT used to profile the system */
-    ArmPerformance::DWT *dwt;
+    ArmPerformance::DWT *_dwt;
+
+  public:
+    ArmPerformance::DWT *dwt() const { return _dwt; }
 
     /**
-     * Helper method to update DWT counters for a committed
-     * instruction.
-     *
-     * @param inst Instruction that just committed
-     */
+      * Helper method to update DWT counters for a committed
+      * instruction.
+      *
+      * @param inst Instruction that just committed
+      */
     virtual void dwtInstCommit(const StaticInstPtr &inst);
 };
 
