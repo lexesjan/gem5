@@ -24,8 +24,8 @@ const char *instCounterNames[] = {
     [InstCounter::IC_SDIV] = "sdiv",
     [InstCounter::IC_UDIV] = "udiv",
     // Compare instructions.
-    [InstCounter::IC_CMP] = "cmp",
-    [InstCounter::IC_CMN] = "cmn",
+    [InstCounter::IC_CMP] = "cmps",
+    [InstCounter::IC_CMN] = "cmns",
     // Logical instructions.
     [InstCounter::IC_AND] = "and",
     [InstCounter::IC_EOR] = "eor",
@@ -122,9 +122,27 @@ InstCounter::write(gem5::PacketPtr pkt)
     assert(pkt->getSize() == 4);
 
     gem5::Addr register_addr = pkt->getAddr() - pioAddr;
+    // Align to enum values.
+    register_addr /= 4;
 
     DPRINTF(ArmInstCounter, "Writing to InstCounter at offset: %#x\n",
-            register_addr);
+            register_addr * 4);
+    switch(register_addr) {
+        case IC_MOV ... IC_B: {
+            const char *counterName = instCounterNames[register_addr];
+            uint32_t instCount = pkt->getLE<uint32_t>();
+            instCountMap[counterName] = instCount;
+            break;
+        }
+        case IC_CTRL: {
+            warn("Unimplemented DWT register write: %#x\n", register_addr);
+            break;
+        }
+        default: {
+            panic("Unexpected DWT register write: %#x\n", register_addr);
+        }
+    }
+
     pkt->makeAtomicResponse();
 
     return pioDelay;
