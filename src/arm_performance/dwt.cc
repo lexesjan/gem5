@@ -8,7 +8,7 @@ namespace ArmPerformance
 {
 
 DWT::DWT(const gem5::ArmDWTParams &params)
-    : gem5::BasicPioDevice(params, 0x2000),
+    : gem5::BasicPioDevice(params, 0x1000),
       control(0x40000001),
       counters(DWT_NCNTRS)
 {
