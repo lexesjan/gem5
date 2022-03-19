@@ -177,6 +177,8 @@ class BaseCPU(ClockedObject):
 
     dwt = Param.ArmDWT(NULL, "Arm Cortex M4 DWT")
 
+    instCounter = Param.ArmInstCounter(NULL, "Arm instruction counter")
+
     icache_port = RequestPort("Instruction Port")
     dcache_port = RequestPort("Data Port")
     _cached_ports = ['icache_port', 'dcache_port']

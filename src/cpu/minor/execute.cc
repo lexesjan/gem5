@@ -899,6 +899,7 @@ Execute::doInstCommitAccounting(MinorDynInstPtr inst)
 
     cpu.probeInstCommit(inst->staticInst, inst->pc->instAddr());
     cpu.dwtInstCommit(inst->staticInst);
+    cpu.instCounter()->incrementInstCount(inst->staticInst->getName());
 }
 
 bool

@@ -53,6 +53,7 @@
 #else
 #include "arch/generic/interrupts.hh"
 #include "arm_performance/dwt.hh"
+#include "arm_performance/inst_counter.hh"
 #include "base/statistics.hh"
 #include "debug/Mwait.hh"
 #include "mem/htm.hh"
@@ -648,6 +649,7 @@ class BaseCPU : public ClockedObject
     const bool powerGatingOnIdle;
     EventFunctionWrapper enterPwrGatingEvent;
 
+  // Arm DWT.
   private:
     /** DWT used to profile the system */
     ArmPerformance::DWT *_dwt;
@@ -662,6 +664,13 @@ class BaseCPU : public ClockedObject
       * @param inst Instruction that just committed
       */
     virtual void dwtInstCommit(const StaticInstPtr &inst);
+
+  // Instruction counting.
+  private:
+    ArmPerformance::InstCounter *_instCounter;
+
+  public:
+    ArmPerformance::InstCounter *instCounter() const { return _instCounter; }
 };
 
 } // namespace gem5
