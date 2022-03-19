@@ -82,7 +82,6 @@ DWT::write(gem5::PacketPtr pkt)
         case DWT_PCSR ... DWT_FUNCTION3:
         case PID4 ... CID3: {
             warn("Unimplemented DWT register write: %#x\n", register_addr);
-            pkt->setLE<uint32_t>(0);
             break;
         }
         default: {
