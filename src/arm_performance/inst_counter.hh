@@ -27,6 +27,7 @@ class InstCounter: public gem5::BasicPioDevice
         IC_ADC,
         // Subtract instructions.
         IC_SUB,
+        IC_SUBS,
         IC_SBC,
         IC_RSB,
         // Multiply instructions.

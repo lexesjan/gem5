@@ -16,6 +16,7 @@ const char *instCounterNames[] = {
     [InstCounter::IC_ADC] = "adc",
     // Subtract instructions.
     [InstCounter::IC_SUB] = "sub",
+    [InstCounter::IC_SUBS] = "subs",
     [InstCounter::IC_SBC] = "sbc",
     [InstCounter::IC_RSB] = "rsb",
     // Multiply instructions.
