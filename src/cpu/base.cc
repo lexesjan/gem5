@@ -782,11 +782,25 @@ BaseCPU::dwtInstCommit(const StaticInstPtr &inst)
         return;
     }
 
+    // Every instruction takes at least one clock cycle.
     if (!inst->isMicroop() || inst->isLastMicroop()) {
         _dwt->incrementCounterValue(ArmPerformance::DWT::DWT_CYCCNT, 1);
     }
 
+    // Division instructions on average take an extra 5 cycles.
+    if (inst->opClass() == OpClass::IntDiv) {
+        _dwt->incrementCounterValue(ArmPerformance::DWT::DWT_CYCCNT, 5);
+    }
+
+    // Load instructions use an extra cycle.
     if (inst->isLoad()) {
+        _dwt->incrementCounterValue(ArmPerformance::DWT::DWT_CYCCNT, 1);
+        _dwt->incrementCounterValue(ArmPerformance::DWT::DWT_LSUCNT, 1);
+    }
+
+    // Store instructions typically use extra cycles if a memory offset is
+    // used. A store instruction without offsets use 6 source registers.
+    if (inst->isStore() && inst->numSrcRegs() > 6) {
         _dwt->incrementCounterValue(ArmPerformance::DWT::DWT_CYCCNT, 1);
         _dwt->incrementCounterValue(ArmPerformance::DWT::DWT_LSUCNT, 1);
     }
